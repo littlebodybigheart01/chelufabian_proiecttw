@@ -1,2 +1,3 @@
-# chelufabian_proiecttw
-Proiect Tehnologii Web
+# README
+
+Au fost adăugate paginile HTML momentan.

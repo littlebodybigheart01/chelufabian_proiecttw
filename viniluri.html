@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden of Records - Viniluri</title>
+    <style>
+        body{font-family:'Helvetica Neue',sans-serif;background-color:#f4f4f4;color:#333;margin:0;padding:0;line-height:1.6}
+        .container{max-width:1100px;margin:auto;overflow:hidden;padding:0 20px}
+        .main-header{background:#333;color:#fff;padding:1rem 0;text-align:center}
+        .main-header h1{margin:0;font-size:2.5rem}
+        .navbar{background:#444;padding:1rem;text-align:center}
+        .navbar a{color:#fff;text-decoration:none;padding:10px 20px;margin:0 5px;border-radius:5px;transition:background-color .3s}
+        .navbar a:hover{background-color:#555}
+        .main-content{padding:2rem 0;text-align:center}
+        .main-content h2{font-size:2rem;margin-bottom:2rem}
+        .main-footer{background:#333;color:#fff;text-align:center;padding:1rem 0;position:relative;width:100%;margin-top:40px;}
+        .lista-produse{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;}
+        .produs{background:#fff;border:1px solid #ddd;border-radius:5px;width:250px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+        .produs img{max-width:100%;height:auto;border-radius:5px;}
+        .produs h3{margin:10px 0 5px 0;}
+        .produs .pret{color:#800000;font-weight:bold; margin: 10px 0;}
+        /* Stilul pentru butonul nou */
+        .buton-add{background:#27ae60;color:#fff;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;transition:background-color .3s; font-size: 1rem;}
+        .buton-add:hover{background:#229954;}
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Garden of Records</h1>
+    </header>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html">Acasă</a>
+            <a href="viniluri.html">Viniluri</a>
+            <a href="cduri.html">CD-uri</a>
+            <a href="merchandise.html">Merchandise</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h2>Colecția noastră de Viniluri</h2>
+            <div class="lista-produse">
+
+                <div class="produs">
+                    <img src="https://thatgrapejuice.net/wp-content/uploads/2025/01/lady-gaga-mayhem-alternative-cover-tgj.jpeg" alt="Lady Gaga - Mayhem (Copertă Alternativă)">
+                    <h3>Mayhem (Alternative Cover)</h3>
+                    <p>Lady Gaga</p>
+                    <p class="pret">299.99 RON</p>
+                    <button class="buton-add">Adaugă în coș</button>
+                </div>
+
+                <div class="produs">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/d/db/Lady_Gaga_-_Mayhem.png" alt="Lady Gaga - Mayhem (Copertă Standard)">
+                    <h3>Mayhem (Standard Cover)</h3>
+                    <p>Lady Gaga</p>
+                    <p class="pret">199.99 RON</p>
+                    <button class="buton-add">Adaugă în coș</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+    </footer>
+</body>
+</html>
