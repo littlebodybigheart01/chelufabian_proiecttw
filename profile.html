@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilul Meu - Garden of Records</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-compact-disc"></i>
+                    <span>Garden of Records</span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Acasă</a></li>
+                    <li><a href="cduri.html">CD-uri</a></li>
+                    <li><a href="viniluri.html">Viniluri</a></li>
+                    <li><a href="merchandise.html">Merchandise</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div class="cart-icon" onclick="window.location.href='cart.html'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                    <div class="user-section" id="userSection"></div>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1><i class="fas fa-user-circle"></i> Profilul Meu</h1>
+                <p>Gestionează-ți informațiile contului</p>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <div class="container">
+                <div class="profile-grid">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h3 id="profileName">Administrator</h3>
+                        <p id="profileEmail">admin@gardenofrecords.ro</p>
+                        
+                        <div class="profile-menu">
+                            <a href="#" class="menu-item active">
+                                <i class="fas fa-user"></i> Informații Personale
+                            </a>
+                            <a href="comenzi.html" class="menu-item">
+                                <i class="fas fa-box"></i> Comenzile Mele
+                            </a>
+                            <a href="#" class="menu-item" id="adminPanelLink" style="display: none;">
+                                <i class="fas fa-cog"></i> Panou Admin
+                            </a>
+                            <a href="#" class="menu-item logout-item" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt"></i> Deconectare
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="profile-content">
+                        <div class="content-card">
+                            <h2>Informații Personale</h2>
+                            <form class="profile-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="name">Nume Complet</label>
+                                        <input type="text" id="name" value="Administrator" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Nume Utilizator</label>
+                                        <input type="text" id="username" value="admin" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" value="admin@gardenofrecords.ro">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Telefon</label>
+                                        <input type="tel" id="phone" placeholder="+40 123 456 789">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">Adresă</label>
+                                    <input type="text" id="address" placeholder="Strada, Nr, Oraș">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvează Modificările
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="content-card">
+                            <h2>Schimbă Parola</h2>
+                            <form class="password-form">
+                                <div class="form-group">
+                                    <label for="currentPassword">Parola Curentă</label>
+                                    <input type="password" id="currentPassword" placeholder="Introdu parola curentă">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="newPassword">Parolă Nouă</label>
+                                        <input type="password" id="newPassword" placeholder="Parolă nouă">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirmă Parola</label>
+                                        <input type="password" id="confirmPassword" placeholder="Confirmă parola">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-key"></i> Actualizează Parola
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Garden of Records</h3>
+                    <p>Magazinul tău de muzică online.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Link-uri Rapide</h3>
+                    <ul>
+                        <li><a href="index.html">Acasă</a></li>
+                        <li><a href="cduri.html">CD-uri</a></li>
+                        <li><a href="viniluri.html">Viniluri</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // Protejează pagina
+        const user = checkAuth();
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
+            
+            // Afișează link-ul către panoul admin dacă utilizatorul este admin
+            if (user.role === 'admin') {
+                document.getElementById('adminPanelLink').style.display = 'flex';
+                document.getElementById('adminPanelLink').href = 'admin.html';
+            }
+        }
+    </script>
+</body>
+</html>
