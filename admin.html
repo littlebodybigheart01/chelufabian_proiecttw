@@ -3,314 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panou Admin - Garden of Records</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Admin - Garden of Records</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-compact-disc"></i>
-                    <span>Garden of Records</span>
-                </a>
-                <ul class="nav-menu">
-                    <li><a href="index.html">Acasă</a></li>
-                    <li><a href="profile.html">Profil</a></li>
-                    <li><a href="admin.html" class="active">Admin</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <div class="user-section" id="userSection"></div>
-                </div>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+    <div class="grid-container">
+        <header id="top">
+            <div class="header-content">
+                <h1>Panou Admin - Garden of Records</h1>
+                <p class="tagline">Gestionează produsele și noutățile</p>
             </div>
+        </header>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html">Înapoi la site</a></li>
+                <li><a href="#products-section">Produse</a></li>
+                <li><a href="#news-section">Noutăți</a></li>
+            </ul>
         </nav>
-    </header>
 
-    <main>
-        <section class="page-header admin-header">
-            <div class="container">
-                <h1><i class="fas fa-cog"></i> Panou de Administrare</h1>
-                <p>Gestionează produsele și stocul magazinului</p>
+        <main>
+            <section class="admin-section" id="products-section">
+                <h2>Adaugă Produs Nou</h2>
+                <form class="admin-form" id="product-form">
+                    <div class="form-group">
+                        <label for="product-name">Nume produs *</label>
+                        <input type="text" id="product-name" name="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-type">Tip produs *</label>
+                        <select id="product-type" name="product-type" required>
+                            <option value="">Selectează tipul</option>
+                            <option value="cd">CD</option>
+                            <option value="vinyl">Vinyl</option>
+                            <option value="merch">Merchandise</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Preț (RON) *</label>
+                        <input type="number" id="product-price" name="product-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">URL imagine</label>
+                        <input type="text" id="product-image" name="product-image" placeholder="/placeholder.svg?height=250&width=250">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Descriere</label>
+                        <textarea id="product-description" name="product-description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Adaugă Produs</button>
+                </form>
+
+                <div class="products-list">
+                    <h3>Produse Existente</h3>
+                    <div id="admin-products-list">
+                        <p class="info-message">Produsele adăugate vor apărea aici.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section" id="news-section">
+                <h2>Adaugă Noutate</h2>
+                <form class="admin-form" id="news-form">
+                    <div class="form-group">
+                        <label for="news-title">Titlu noutate *</label>
+                        <input type="text" id="news-title" name="news-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-date">Data *</label>
+                        <input type="date" id="news-date" name="news-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-image">URL imagine</label>
+                        <input type="text" id="news-image" name="news-image" placeholder="/placeholder.svg?height=200&width=300">
+                    </div>
+                    <div class="form-group">
+                        <label for="news-content">Conținut *</label>
+                        <textarea id="news-content" name="news-content" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Publică Noutate</button>
+                </form>
+
+                <div class="news-list">
+                    <h3>Noutăți Existente</h3>
+                    <div id="admin-news-list">
+                        <p class="info-message">Noutățile adăugate vor apărea aici..</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <div class="sidebar-widget">
+                <h3>Informații</h3>
+                <p>Datele nu sunt salvate permanent până când nu se conectează o bază de date.</p>
             </div>
-        </section>
-
-        <section class="admin-section">
-            <div class="container">
-                <div class="admin-tabs">
-                    <button class="admin-tab-btn active" data-tab="products">
-                        <i class="fas fa-boxes"></i> Produse
-                    </button>
-                    <button class="admin-tab-btn" data-tab="add">
-                        <i class="fas fa-plus-circle"></i> Adaugă Produs
-                    </button>
-                    <button class="admin-tab-btn" data-tab="orders">
-                        <i class="fas fa-shopping-cart"></i> Comenzi
-                    </button>
-                    <button class="admin-tab-btn" data-tab="stats">
-                        <i class="fas fa-chart-line"></i> Statistici
-                    </button>
-                </div>
-
-                <!-- Tab Produse -->
-                <div class="admin-tab-content active" id="products-tab">
-                    <div class="products-header">
-                        <h2>Gestionează Produsele</h2>
-                        <div class="search-filter">
-                            <input type="text" placeholder="Caută produse..." class="search-input">
-                            <select class="filter-select">
-                                <option value="">Toate Categoriile</option>
-                                <option value="cd">CD-uri</option>
-                                <option value="vinyl">Viniluri</option>
-                                <option value="merch">Merchandise</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="products-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Produs</th>
-                                    <th>Categorie</th>
-                                    <th>Preț</th>
-                                    <th>Stoc</th>
-                                    <th>Status</th>
-                                    <th>Acțiuni</th>
-                                </tr>
-                            </thead>
-                            <tbody id="productsTableBody">
-                                <tr>
-                                    <td>#001</td>
-                                    <td>
-                                        <div class="product-cell">
-                                            <i class="fas fa-compact-disc"></i>
-                                            <span>Dark Side of the Moon - Pink Floyd</span>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge badge-cd">CD</span></td>
-                                    <td>49.99 RON</td>
-                                    <td>
-                                        <input type="number" value="25" class="stock-input" min="0">
-                                    </td>
-                                    <td><span class="status-badge active">Activ</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-icon edit" title="Editează">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn-icon delete" title="Șterge">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#002</td>
-                                    <td>
-                                        <div class="product-cell">
-                                            <i class="fas fa-record-vinyl"></i>
-                                            <span>Abbey Road - The Beatles</span>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge badge-vinyl">Vinil</span></td>
-                                    <td>139.99 RON</td>
-                                    <td>
-                                        <input type="number" value="15" class="stock-input" min="0">
-                                    </td>
-                                    <td><span class="status-badge active">Activ</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-icon edit" title="Editează">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn-icon delete" title="Șterge">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab Adaugă Produs -->
-                <div class="admin-tab-content" id="add-tab">
-                    <div class="add-product-form">
-                        <h2>Adaugă Produs Nou</h2>
-                        <form id="addProductForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="productName">
-                                        <i class="fas fa-tag"></i> Nume Produs
-                                    </label>
-                                    <input type="text" id="productName" required placeholder="Ex: Dark Side of the Moon">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productArtist">
-                                        <i class="fas fa-microphone"></i> Artist
-                                    </label>
-                                    <input type="text" id="productArtist" required placeholder="Ex: Pink Floyd">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productCategory">
-                                        <i class="fas fa-list"></i> Categorie
-                                    </label>
-                                    <select id="productCategory" required>
-                                        <option value="">Selectează categoria</option>
-                                        <option value="cd">CD</option>
-                                        <option value="vinyl">Vinil</option>
-                                        <option value="merch">Merchandise</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productGenre">
-                                        <i class="fas fa-music"></i> Gen Muzical
-                                    </label>
-                                    <input type="text" id="productGenre" placeholder="Ex: Rock, Pop, Jazz">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productPrice">
-                                        <i class="fas fa-dollar-sign"></i> Preț (RON)
-                                    </label>
-                                    <input type="number" id="productPrice" required min="0" step="0.01" placeholder="49.99">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productStock">
-                                        <i class="fas fa-boxes"></i> Stoc
-                                    </label>
-                                    <input type="number" id="productStock" required min="0" placeholder="25">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productYear">
-                                        <i class="fas fa-calendar"></i> An Lansare
-                                    </label>
-                                    <input type="number" id="productYear" min="1900" max="2025" placeholder="1973">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="productLabel">
-                                        <i class="fas fa-record-vinyl"></i> Casă de Discuri
-                                    </label>
-                                    <input type="text" id="productLabel" placeholder="Ex: EMI Records">
-                                </div>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="productDescription">
-                                    <i class="fas fa-align-left"></i> Descriere
-                                </label>
-                                <textarea id="productDescription" rows="4" placeholder="Descriere detaliată a produsului..."></textarea>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus-circle"></i> Adaugă Produs
-                                </button>
-                                <button type="reset" class="btn btn-secondary btn-lg">
-                                    <i class="fas fa-redo"></i> Resetează
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Tab Comenzi -->
-                <div class="admin-tab-content" id="orders-tab">
-                    <h2>Gestionează Comenzile</h2>
-                    <div class="orders-stats">
-                        <div class="stat-card">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <h3>8</h3>
-                                <p>În așteptare</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-shipping-fast"></i>
-                            <div>
-                                <h3>12</h3>
-                                <p>În livrare</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h3>156</h3>
-                                <p>Finalizate</p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="info-text">Funcționalitate în dezvoltare</p>
-                </div>
-
-                <!-- Tab Statistici -->
-                <div class="admin-tab-content" id="stats-tab">
-                    <h2>Statistici și Rapoarte</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <i class="fas fa-box"></i>
-                            <h3>247</h3>
-                            <p>Produse Totale</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-dollar-sign"></i>
-                            <h3>15,420 RON</h3>
-                            <p>Vânzări Luna Curentă</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-users"></i>
-                            <h3>89</h3>
-                            <p>Clienți Activi</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-star"></i>
-                            <h3>4.8</h3>
-                            <p>Rating Mediu</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="sidebar-widget">
+                <h3>Statistici</h3>
+                <p><strong>Produse:</strong> <span id="stats-products">0</span></p>
+                <p><strong>Noutăți:</strong> <span id="stats-news">0</span></p>
             </div>
-        </section>
-    </main>
+        </aside>
 
-    <footer>
-        <div class="container">
+        <footer>
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Garden of Records</h3>
+                    <h4>Garden of Records - Admin</h4>
                     <p>Panou de administrare</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link-uri</h4>
+                    <ul>
+                        <li><a href="index.html">Înapoi la site</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
-    <script src="js/auth.js"></script>
-    <script src="js/admin.js"></script>
-    <script>
-        // Protejează pagina - doar admini
-        const user = checkAuth();
-        if (!user || user.role !== 'admin') {
-            alert('Acces interzis! Doar administratorii pot accesa această pagină.');
-            window.location.href = 'index.html';
-        }
-    </script>
+    <a href="#top" class="back-to-top" title="Mergi sus">⬆️</a>
+
+    <script src="scripts/admin.js"></script>
 </body>
 </html>
