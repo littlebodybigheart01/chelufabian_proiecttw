@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden of Records - Magazin de Muzică</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="grid-container">
+        <header id="top">
+            <div class="header-content">
+                <h1>Garden of Records</h1>
+                <p class="tagline">Grădina ta de sunete</p>
+            </div>
+        </header>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="nav-menu">
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Acasă</a></li>
+                <li><a href="cd.html">CD-uri</a></li>
+                <li><a href="vinyl.html">Vinyl-uri</a></li>
+                <li><a href="merch.html">Merchandise</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" id="cart-link">Coș (<span id="cart-count">0</span>)</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="hero">
+                <h2>Bun venit la Garden of Records</h2>
+                <p>Descoperă cele mai bune albume pe CD și vinyl, plus merchandise exclusiv pentru adevărații iubitori de muzică.</p>
+            </section>
+
+            <section class="news-section">
+                <h2>Noutăți</h2>
+                <div class="news-grid">
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <div class="sidebar-widget">
+                <h3>Categorii Populare</h3>
+                <ul class="category-list">
+                    <li><a href="vinyl.html">Vinyl-uri</a></li>
+                    <li><a href="cd.html">CD-uri</a></li>
+                    <li><a href="merch.html">Merchandise</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3>Newsletter</h3>
+                <p>Abonează-te pentru oferte exclusive!</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Email-ul tău" required>
+                    <button type="submit">Abonează-te</button>
+                </form>
+            </div>
+        </aside>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Garden of Records</h4>
+                    <p>Magazinul tău de muzică preferat!</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link-uri Rapide</h4>
+                    <ul>
+                        <li><a href="index.html">Acasă</a></li>
+                        <li><a href="cd.html">CD-uri</a></li>
+                        <li><a href="vinyl.html">Vinyl-uri</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>contact@gardenofrecords.ro</p>
+                    <p>+40 123 456 789</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+                <a href="admin.html" class="admin-link">•</a>
+            </div>
+        </footer>
+    </div>
+
+    <a href="#top" class="back-to-top" title="Mergi sus">↑</a>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Coșul tău de cumpărături</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <strong>Total: <span id="cart-total">0.00</span> RON</strong>
+            </div>
+            <button class="checkout-btn">Finalizează comanda</button>
+        </div>
+    </div>
+
+    <script src="scripts/cart.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>

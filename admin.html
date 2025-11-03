@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Garden of Records</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <div class="grid-container">
+        <header id="top">
+            <div class="header-content">
+                <h1>Panou Admin - Garden of Records</h1>
+                <p class="tagline">Gestionează produsele și noutățile</p>
+            </div>
+        </header>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html">Înapoi la site</a></li>
+                <li><a href="#products-section">Produse</a></li>
+                <li><a href="#news-section">Noutăți</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="admin-section" id="products-section">
+                <h2>Adaugă Produs Nou</h2>
+                <form class="admin-form" id="product-form">
+                    <div class="form-group">
+                        <label for="product-name">Nume produs *</label>
+                        <input type="text" id="product-name" name="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-type">Tip produs *</label>
+                        <select id="product-type" name="product-type" required>
+                            <option value="">Selectează tipul</option>
+                            <option value="cd">CD</option>
+                            <option value="vinyl">Vinyl</option>
+                            <option value="merch">Merchandise</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Preț (RON) *</label>
+                        <input type="number" id="product-price" name="product-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">URL imagine</label>
+                        <input type="text" id="product-image" name="product-image" placeholder="/placeholder.svg?height=250&width=250">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Descriere</label>
+                        <textarea id="product-description" name="product-description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Adaugă Produs</button>
+                </form>
+
+                <div class="products-list">
+                    <h3>Produse Existente</h3>
+                    <div id="admin-products-list">
+                        <p class="info-message">Produsele adăugate vor apărea aici.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section" id="news-section">
+                <h2>Adaugă Noutate</h2>
+                <form class="admin-form" id="news-form">
+                    <div class="form-group">
+                        <label for="news-title">Titlu noutate *</label>
+                        <input type="text" id="news-title" name="news-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-date">Data *</label>
+                        <input type="date" id="news-date" name="news-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-image">URL imagine</label>
+                        <input type="text" id="news-image" name="news-image" placeholder="/placeholder.svg?height=200&width=300">
+                    </div>
+                    <div class="form-group">
+                        <label for="news-content">Conținut *</label>
+                        <textarea id="news-content" name="news-content" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Publică Noutate</button>
+                </form>
+
+                <div class="news-list">
+                    <h3>Noutăți Existente</h3>
+                    <div id="admin-news-list">
+                        <p class="info-message">Noutățile adăugate vor apărea aici..</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <div class="sidebar-widget">
+                <h3>Informații</h3>
+                <p>Datele nu sunt salvate permanent până când nu se conectează o bază de date.</p>
+            </div>
+            <div class="sidebar-widget">
+                <h3>Statistici</h3>
+                <p><strong>Produse:</strong> <span id="stats-products">0</span></p>
+                <p><strong>Noutăți:</strong> <span id="stats-news">0</span></p>
+            </div>
+        </aside>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Garden of Records - Admin</h4>
+                    <p>Panou de administrare</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link-uri</h4>
+                    <ul>
+                        <li><a href="index.html">Înapoi la site</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+            </div>
+        </footer>
+    </div>
+
+    <a href="#top" class="back-to-top" title="Mergi sus">⬆️</a>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>
