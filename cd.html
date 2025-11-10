@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden of Records - Magazin de Muzică</title>
+    <title>CD-uri - Garden of Records</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
     <div class="grid-container">
         <header id="top">
-            <!-- Adding more glitter particles to header -->
+            <!-- Adding glitter layer for more particles -->
             <div class="glitter-layer"></div>
             <!-- Centered logo without text -->
             <div class="header-content">
@@ -32,8 +32,8 @@
 
         <nav id="nav-menu">
             <ul class="nav-menu">
-                <li><a href="index.html" class="active">Acasă</a></li>
-                <li><a href="cd.html">CD-uri</a></li>
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="cd.html" class="active">CD-uri</a></li>
                 <li><a href="vinyl.html">Vinyl-uri</a></li>
                 <li><a href="merch.html">Merchandise</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -42,34 +42,38 @@
         </nav>
 
         <main>
-            <section class="hero">
-                <h2>Bun venit la Garden of Records</h2>
-                <p>Descoperă cele mai bune albume pe CD și vinyl, plus merchandise exclusiv pentru adevărații iubitori de muzică.</p>
+            <section class="page-header">
+                <h2>Colecția noastră de CD-uri</h2>
+                <p>Descoperă cele mai bune albume pe CD, de la clasici la lansări recente</p>
             </section>
 
-            <section class="news-section">
-                <h2>Noutăți</h2>
-                <div class="news-grid">
+            <section class="products-section">
+                <div class="products-flex">
+                    <div class="product-card">
+                        <img src="/images/ladygaga.webp" alt="Lady Gaga - Mayhem">
+                        <h3>Mayhem</h3>
+                        <p class="product-type">Lady Gaga</p>
+                        <p class="product-price">89.99 RON</p>
+                        <button class="add-to-cart" data-name="Mayhem - Lady Gaga" data-price="89.99" data-type="CD">Adaugă în coș</button>
+                    </div>
                 </div>
             </section>
         </main>
 
         <aside>
             <div class="sidebar-widget">
-                <h3>Categorii Populare</h3>
+                <h3>Filtrează după gen</h3>
                 <ul class="category-list">
-                    <li><a href="vinyl.html">Vinyl-uri</a></li>
-                    <li><a href="cd.html">CD-uri</a></li>
-                    <li><a href="merch.html">Merchandise</a></li>
+                    <li><a href="#">Rock</a></li>
+                    <li><a href="#">Pop</a></li>
+                    <li><a href="#">Jazz</a></li>
+                    <li><a href="#">Hip-Hop</a></li>
+                    <li><a href="#">Clasic</a></li>
                 </ul>
             </div>
             <div class="sidebar-widget">
-                <h3>Newsletter</h3>
-                <p>Abonează-te pentru oferte exclusive!</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email-ul tău" required>
-                    <button type="submit">Abonează-te</button>
-                </form>
+                <h3>Oferte Speciale</h3>
+                <p>Reduceri de până la 30% la CD-uri selectate!</p>
             </div>
         </aside>
 

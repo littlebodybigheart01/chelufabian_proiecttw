@@ -4,210 +4,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Garden of Records</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/forms.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-compact-disc"></i>
-                    <span>Garden of Records</span>
-                </a>
-                <ul class="nav-menu">
-                    <li><a href="index.html">Acasă</a></li>
-                    <li><a href="cduri.html">CD-uri</a></li>
-                    <li><a href="viniluri.html">Viniluri</a></li>
-                    <li><a href="merchandise.html">Merchandise</a></li>
-                    <li><a href="contact.html" class="active">Contact</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <div class="cart-icon" onclick="window.location.href='cart.html'">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">0</span>
-                    </div>
-                    <div class="user-section" id="userSection"></div>
-                </div>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+    <div class="grid-container">
+        <header id="top">
+            <!-- Adding glitter layer for more particles -->
+            <div class="glitter-layer"></div>
+            <!-- Centered logo without text -->
+            <div class="header-content">
+                <div class="header-logo-wrapper">
+                    <a href="index.html" class="logo-link">
+                        <img src="/images/logo-transparent.png" alt="Garden of Records Logo" class="header-logo-circle">
+                    </a>
                 </div>
             </div>
+        </header>
+
+        <!-- Added cart badge wrapper for mobile -->
+        <div class="hamburger-wrapper">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="cart-badge hidden" id="mobile-cart-badge">0</div>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-menu">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="cd.html">CD-uri</a></li>
+                <li><a href="vinyl.html">Vinyl-uri</a></li>
+                <li><a href="merch.html">Merchandise</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="#" id="cart-link">Coș (<span id="cart-count">0</span>)</a></li>
+            </ul>
         </nav>
-    </header>
 
-    <main>
-        <section class="page-header">
-            <div class="container">
-                <h1><i class="fas fa-envelope"></i> Contactează-ne</h1>
-                <p>Suntem aici pentru a te ajuta. Trimite-ne un mesaj!</p>
-            </div>
-        </section>
+        <main>
+            <section class="page-header">
+                <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Contact" style="width: 48px; height: 48px; display: inline-block; vertical-align: middle; margin-right: 10px;">
+                <h2 style="display: inline-block; vertical-align: middle;">Contactează-ne</h2>
+                <p>Suntem aici să te ajutăm cu orice întrebare</p>
+            </section>
 
-        <section class="contact-section">
-            <div class="container">
-                <div class="contact-grid">
-                    <div class="contact-info">
-                        <h2>Informații de Contact</h2>
-                        <p>Echipa noastră este disponibilă pentru a răspunde la întrebările tale.</p>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Adresă</h3>
-                                <p>Strada Muzicii Nr. 10<br>București, România, 010101</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Telefon</h3>
-                                <p>+40 123 456 789<br>Luni - Vineri: 09:00 - 18:00</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Email</h3>
-                                <p>info@gardenofrecords.ro<br>support@gardenofrecords.ro</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Program</h3>
-                                <p>Luni - Vineri: 09:00 - 18:00<br>Sâmbătă: 10:00 - 14:00<br>Duminică: Închis</p>
-                            </div>
-                        </div>
-
-                        <div class="social-section">
-                            <h3>Urmărește-ne pe Social Media</h3>
-                            <div class="social-links-large">
-                                <a href="#" class="social-link">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                                <a href="#" class="social-link">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="social-link">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" class="social-link">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                            </div>
-                        </div>
+            <section class="contact-section">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Adresa" style="width: 32px; height: 32px; margin-bottom: 10px;">
+                        <h3>Adresa</h3>
+                        <p>Drumul Găzarului, Nr. 18</p>
+                        <p>București, România</p>
+                        <p>Cod poștal: 040822</p>
                     </div>
-
-                    <div class="contact-form-container">
-                        <h2>Trimite-ne un Mesaj</h2>
-                        <form class="contact-form" id="contactForm" onsubmit="event.preventDefault(); alert('Mesaj trimis cu succes!');">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">
-                                        <i class="fas fa-user"></i> Nume Complet
-                                    </label>
-                                    <input type="text" id="name" name="name" required placeholder="Introdu numele tău">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">
-                                        <i class="fas fa-envelope"></i> Email
-                                    </label>
-                                    <input type="email" id="email" name="email" required placeholder="exemplu@email.ro">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="phone">
-                                        <i class="fas fa-phone"></i> Telefon
-                                    </label>
-                                    <input type="tel" id="phone" name="phone" placeholder="+40 123 456 789">
-                                </div>
-                                <div class="form-group">
-                                    <label for="subject">
-                                        <i class="fas fa-tag"></i> Subiect
-                                    </label>
-                                    <select id="subject" name="subject" required>
-                                        <option value="">Selectează un subiect</option>
-                                        <option value="order">Întrebări despre Comandă</option>
-                                        <option value="product">Întrebări despre Produse</option>
-                                        <option value="shipping">Livrare și Returnare</option>
-                                        <option value="payment">Plăți</option>
-                                        <option value="other">Altele</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="message">
-                                    <i class="fas fa-comment"></i> Mesaj
-                                </label>
-                                <textarea id="message" name="message" rows="6" required placeholder="Scrie mesajul tău aici..."></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-block">
-                                <i class="fas fa-paper-plane"></i> Trimite Mesajul
-                            </button>
-                        </form>
+                    <div class="contact-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Telefon" style="width: 32px; height: 32px; margin-bottom: 10px;">
+                        <h3>Telefon</h3>
+                        <p>+40 123 456 789</p>
+                        <p>Luni - Vineri: 10:00 - 19:00</p>
+                        <p>Sâmbătă: 10:00 - 16:00</p>
+                    </div>
+                    <div class="contact-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" style="width: 32px; height: 32px; margin-bottom: 10px;">
+                        <h3>Email</h3>
+                        <p>contact@gardenofrecords.ro</p>
+                        <p>comenzi@gardenofrecords.ro</p>
+                        <p>suport@gardenofrecords.ro</p>
+                    </div>
+                    <div class="contact-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Social Media" style="width: 32px; height: 32px; margin-bottom: 10px;">
+                        <h3>Social Media</h3>
+                        <p>Facebook: GardenOfRecords</p>
+                        <p>Instagram: @gardenofrecords</p>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <footer>
-        <div class="container">
+                <div class="contact-form-container">
+                    <h3>Trimite-ne un mesaj</h3>
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Nume complet *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subiect *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Selectează un subiect</option>
+                                <option value="comanda">Întrebare despre comandă</option>
+                                <option value="produs">Întrebare despre produs</option>
+                                <option value="retur">Returnare/Schimb</option>
+                                <option value="altele">Altele</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mesaj *</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Trimite mesajul</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <div class="sidebar-widget">
+                <h3>Program de lucru</h3>
+                <ul class="schedule-list">
+                    <li><strong>Luni - Vineri:</strong> 10:00 - 19:00</li>
+                    <li><strong>Sâmbătă:</strong> 10:00 - 16:00</li>
+                    <li><strong>Duminică:</strong> Închis</li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3>Întrebări Frecvente</h3>
+                <p>Vizitează secțiunea noastră de FAQ pentru răspunsuri rapide la cele mai comune întrebări.</p>
+            </div>
+        </aside>
+
+        <footer>
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Garden of Records</h3>
-                    <p>Magazinul tău de muzică online.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
+                    <h4>Garden of Records</h4>
+                    <p>Magazinul tău de muzică preferat!</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Link-uri Rapide</h3>
+                    <h4>Link-uri Rapide</h4>
                     <ul>
                         <li><a href="index.html">Acasă</a></li>
-                        <li><a href="cduri.html">CD-uri</a></li>
-                        <li><a href="viniluri.html">Viniluri</a></li>
-                        <li><a href="merchandise.html">Merchandise</a></li>
+                        <li><a href="cd.html">CD-uri</a></li>
+                        <li><a href="vinyl.html">Vinyl-uri</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Contact</h3>
-                    <ul>
-                        <li><i class="fas fa-phone"></i> +40 123 456 789</li>
-                        <li><i class="fas fa-envelope"></i> info@gardenofrecords.ro</li>
-                        <li><i class="fas fa-map-marker-alt"></i> București, România</li>
-                    </ul>
+                    <h4>Contact</h4>
+                    <p>contact@gardenofrecords.ro</p>
+                    <p>+40 123 456 789</p>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+                <a href="admin.html" class="admin-link">•</a>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
-    <script src="js/auth.js"></script>
-    <script src="js/script.js"></script>
+    <!-- Replaced text arrow with beautiful SVG icon -->
+    <a href="#top" class="back-to-top" title="Mergi sus">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </a>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Coșul tău de cumpărături</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <strong>Total: <span id="cart-total">0.00</span> RON</strong>
+            </div>
+            <button class="checkout-btn">Finalizează comanda</button>
+        </div>
+    </div>
+
+    <script src="scripts/cart.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/contact.js"></script>
 </body>
 </html>

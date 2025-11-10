@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden of Records - Magazin de Muzică</title>
+    <title>Vinyl-uri - Garden of Records</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
     <div class="grid-container">
         <header id="top">
-            <!-- Adding more glitter particles to header -->
+            <!-- Adding glitter layer for more particles -->
             <div class="glitter-layer"></div>
             <!-- Centered logo without text -->
             <div class="header-content">
@@ -32,9 +32,9 @@
 
         <nav id="nav-menu">
             <ul class="nav-menu">
-                <li><a href="index.html" class="active">Acasă</a></li>
+                <li><a href="index.html">Acasă</a></li>
                 <li><a href="cd.html">CD-uri</a></li>
-                <li><a href="vinyl.html">Vinyl-uri</a></li>
+                <li><a href="vinyl.html" class="active">Vinyl-uri</a></li>
                 <li><a href="merch.html">Merchandise</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="#" id="cart-link">Coș (<span id="cart-count">0</span>)</a></li>
@@ -42,34 +42,38 @@
         </nav>
 
         <main>
-            <section class="hero">
-                <h2>Bun venit la Garden of Records</h2>
-                <p>Descoperă cele mai bune albume pe CD și vinyl, plus merchandise exclusiv pentru adevărații iubitori de muzică.</p>
+            <section class="page-header">
+                <h2>Colecția noastră de Vinyl-uri</h2>
+                <p>Experimentează sunetul cald și autentic al muzicii pe vinyl</p>
             </section>
 
-            <section class="news-section">
-                <h2>Noutăți</h2>
-                <div class="news-grid">
+            <section class="products-section">
+                <div class="products-flex">
+                    <div class="product-card">
+                        <img src="/images/britney.png" alt="Britney Spears - Circus">
+                        <h3>Circus</h3>
+                        <p class="product-type">Britney Spears</p>
+                        <p class="product-price">99.99 RON</p>
+                        <button class="add-to-cart" data-name="Circus - Britney Spears" data-price="149.99" data-type="Vinyl">Adaugă în coș</button>
+                    </div>
                 </div>
             </section>
         </main>
 
         <aside>
             <div class="sidebar-widget">
-                <h3>Categorii Populare</h3>
+                <h3>Filtrează după gen</h3>
                 <ul class="category-list">
-                    <li><a href="vinyl.html">Vinyl-uri</a></li>
-                    <li><a href="cd.html">CD-uri</a></li>
-                    <li><a href="merch.html">Merchandise</a></li>
+                    <li><a href="#">Rock</a></li>
+                    <li><a href="#">Jazz</a></li>
+                    <li><a href="#">Soul</a></li>
+                    <li><a href="#">Reggae</a></li>
+                    <li><a href="#">Blues</a></li>
                 </ul>
             </div>
             <div class="sidebar-widget">
-                <h3>Newsletter</h3>
-                <p>Abonează-te pentru oferte exclusive!</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email-ul tău" required>
-                    <button type="submit">Abonează-te</button>
-                </form>
+                <h3>De ce Vinyl?</h3>
+                <p>Sunetul cald și autentic al vinilului oferă o experiență de ascultare unică și nostalgică.</p>
             </div>
         </aside>
 

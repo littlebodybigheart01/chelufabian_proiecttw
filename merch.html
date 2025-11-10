@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden of Records - Magazin de Muzică</title>
+    <title>Merchandise - Garden of Records</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
     <div class="grid-container">
         <header id="top">
-            <!-- Adding more glitter particles to header -->
+            <!-- Adding glitter layer for more particles -->
             <div class="glitter-layer"></div>
             <!-- Centered logo without text -->
             <div class="header-content">
@@ -21,6 +21,7 @@
             </div>
         </header>
 
+        <!-- Added cart badge wrapper for mobile -->
         <div class="hamburger-wrapper">
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
                 <span></span>
@@ -29,47 +30,51 @@
             </button>
             <div class="cart-badge hidden" id="mobile-cart-badge">0</div>
         </div>
+        <!-- </CHANGE> -->
 
         <nav id="nav-menu">
             <ul class="nav-menu">
-                <li><a href="index.html" class="active">Acasă</a></li>
+                <li><a href="index.html">Acasă</a></li>
                 <li><a href="cd.html">CD-uri</a></li>
                 <li><a href="vinyl.html">Vinyl-uri</a></li>
-                <li><a href="merch.html">Merchandise</a></li>
+                <li><a href="merch.html" class="active">Merchandise</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="#" id="cart-link">Coș (<span id="cart-count">0</span>)</a></li>
             </ul>
         </nav>
 
         <main>
-            <section class="hero">
-                <h2>Bun venit la Garden of Records</h2>
-                <p>Descoperă cele mai bune albume pe CD și vinyl, plus merchandise exclusiv pentru adevărații iubitori de muzică.</p>
+            <section class="page-header">
+                <h2>Merchandise Exclusiv</h2>
+                <p>Tricouri, hanorace și accesorii pentru adevărații fani ai muzicii</p>
             </section>
 
-            <section class="news-section">
-                <h2>Noutăți</h2>
-                <div class="news-grid">
+            <section class="products-section">
+                <div class="products-flex">
+                    <div class="product-card">
+                        <img src="/images/melanie.webp" alt="Melanie Martinez - Crybaby Perfume">
+                        <h3>Crybaby Perfume</h3>
+                        <p class="product-type">Melanie Martinez</p>
+                        <p class="product-price">499.99 RON</p>
+                        <button class="add-to-cart" data-name="Crybaby Perfume - Melanie Martinez" data-price="499.99" data-type="Merch">Adaugă în coș</button>
+                    </div>
                 </div>
             </section>
         </main>
 
         <aside>
             <div class="sidebar-widget">
-                <h3>Categorii Populare</h3>
+                <h3>Categorii Merch</h3>
                 <ul class="category-list">
-                    <li><a href="vinyl.html">Vinyl-uri</a></li>
-                    <li><a href="cd.html">CD-uri</a></li>
-                    <li><a href="merch.html">Merchandise</a></li>
+                    <li><a href="#">Îmbrăcăminte</a></li>
+                    <li><a href="#">Accesorii</a></li>
+                    <li><a href="#">Decorațiuni</a></li>
+                    <!-- Removed "Articole Casnice" -->
                 </ul>
             </div>
             <div class="sidebar-widget">
-                <h3>Newsletter</h3>
-                <p>Abonează-te pentru oferte exclusive!</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email-ul tău" required>
-                    <button type="submit">Abonează-te</button>
-                </form>
+                <h3>Mărimi Disponibile</h3>
+                <p>S, M, L, XL, XXL pentru toate articolele de îmbrăcăminte</p>
             </div>
         </aside>
 
@@ -101,11 +106,13 @@
         </footer>
     </div>
 
+    <!-- Replaced text arrow with beautiful SVG icon -->
     <a href="#top" class="back-to-top" title="Mergi sus">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </a>
+    <!-- </CHANGE> -->
 
     <div id="cart-modal" class="modal">
         <div class="modal-content">
