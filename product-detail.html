@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden of Records - Magazin de Muzică</title>
+    <title>Detalii Produs - Garden of Records</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
     <div class="grid-container">
         <header id="top">
-            <!-- Adding more glitter particles to header -->
+            <!-- Adding glitter layer for more particles -->
             <div class="glitter-layer"></div>
             <!-- Centered logo without text -->
             <div class="header-content">
@@ -32,7 +32,7 @@
 
         <nav id="nav-menu">
             <ul class="nav-menu">
-                <li><a href="index.html" class="active">Acasă</a></li>
+                <li><a href="index.html">Acasă</a></li>
                 <li><a href="cd.html">CD-uri</a></li>
                 <li><a href="vinyl.html">Vinyl-uri</a></li>
                 <li><a href="merch.html">Merchandise</a></li>
@@ -42,34 +42,43 @@
         </nav>
 
         <main>
-            <section class="hero">
-                <h2>Bun venit la Garden of Records</h2>
-                <p>Descoperă cele mai bune albume pe CD și vinyl, plus merchandise exclusiv pentru adevărații iubitori de muzică.</p>
-            </section>
-
-            <section class="news-section">
-                <h2>Noutăți</h2>
-                <div class="news-grid">
+            <div class="product-detail-container" id="product-detail">
+                <!-- Product details will be dynamically loaded here from database -->
+                <div>
+                    <img src="/images/britney.png" alt="Product Image" class="product-detail-image" id="product-image">
                 </div>
-            </section>
+                <div class="product-detail-info">
+                    <h2 id="product-name">Nume Produs</h2>
+                    <p class="product-detail-type" id="product-type">Tip Produs</p>
+                    <p class="product-detail-price" id="product-price">0.00 RON</p>
+                    <div class="product-detail-description">
+                        <p id="product-description">
+                            Descrierea detaliată a produsului va fi încărcată din baza de date. 
+                            Aici poți include informații despre produs, detalii tehnice, și orice 
+                            alte informații relevante pentru client.
+                        </p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h3>Caracteristici</h3>
+                        <ul id="product-features">
+                            <li>Caracteristica 1 va fi încărcată din baza de date</li>
+                            <li>Caracteristica 2 va fi încărcată din baza de date</li>
+                            <li>Caracteristica 3 va fi încărcată din baza de date</li>
+                        </ul>
+                    </div>
+                    <button class="add-to-cart-detail" id="add-to-cart-detail-btn">Adaugă în coș</button>
+                </div>
+            </div>
         </main>
 
         <aside>
             <div class="sidebar-widget">
-                <h3>Categorii Populare</h3>
-                <ul class="category-list">
-                    <li><a href="vinyl.html">Vinyl-uri</a></li>
-                    <li><a href="cd.html">CD-uri</a></li>
-                    <li><a href="merch.html">Merchandise</a></li>
-                </ul>
+                <h3>Produse Similare</h3>
+                <p>Aici vor apărea produse similare din baza de date</p>
             </div>
             <div class="sidebar-widget">
-                <h3>Newsletter</h3>
-                <p>Abonează-te pentru oferte exclusive!</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email-ul tău" required>
-                    <button type="submit">Abonează-te</button>
-                </form>
+                <h3>Livrare</h3>
+                <p>Livrare gratuită pentru comenzi peste 200 RON</p>
             </div>
         </aside>
 
@@ -101,6 +110,7 @@
         </footer>
     </div>
 
+    <!-- Replaced text arrow with beautiful SVG icon -->
     <a href="#top" class="back-to-top" title="Mergi sus">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -121,5 +131,6 @@
 
     <script src="scripts/cart.js"></script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/product-detail.js"></script>
 </body>
 </html>
