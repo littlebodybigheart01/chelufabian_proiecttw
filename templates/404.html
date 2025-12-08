@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Pagina nu găsită - Garden of Records{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 2rem;">
+    <h1 style="font-size: 3rem; color: #ef4444;">404</h1>
+    <h2>Pagina nu a fost găsită</h2>
+    <p>Pagina pe care o cauți nu există.</p>
+    <a href="{{ url_for('index') }}" class="add-to-cart" style="display: inline-block; margin-top: 2rem;">Înapoi la Acasă</a>
+</div>
+{% endblock %}

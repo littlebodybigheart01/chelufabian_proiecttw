@@ -1,0 +1,2635 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #1a1a1a;
+  --secondary-color: #2d2d2d;
+  --accent-color: #4a9eff;
+  --text-color: #333333;
+  --text-light: #666666;
+  --bg-color: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --border-color: #e0e0e0;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto auto;
+  grid-template-areas:
+    "header"
+    "nav"
+    "main"
+    "aside"
+    "footer";
+  min-height: 100vh;
+}
+
+/* Caută acest bloc în main.css (aprox linia 45-50) și înlocuiește-l cu acesta: */
+
+@media (min-width: 900px) {
+  .grid-container {
+    /* Modificăm coloanele: 1fr pentru conținut și 350px fix pentru sidebar 
+       (astfel sidebar-ul nu devine uriaș pe ecrane mari) */
+    grid-template-columns: 1fr 350px; 
+    
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "header header"
+      "nav nav"
+      "main aside"
+      "footer footer";
+      
+    /* AICI SUNT SCHIMBĂRILE CHEIE: */
+    max-width: 100%;  /* Era 1400px - acum ocupă tot ecranul */
+    margin: 0;        /* Era 0 auto - scoatem centrarea */
+    gap: 0;
+  }
+}
+
+/* Slower gray gradient animation with glitter particles */
+header {
+  grid-area: header;
+  background: linear-gradient(
+    90deg,
+    #1a1a1a,
+    #2d2d2d,
+    #3f3f3f,
+    #525252,
+    #666666,
+    #7a7a7a,
+    #8e8e8e,
+    #a3a3a3,
+    #b8b8b8,
+    #cccccc,
+    #e0e0e0,
+    #cccccc,
+    #b8b8b8,
+    #a3a3a3,
+    #8e8e8e,
+    #7a7a7a,
+    #666666,
+    #525252,
+    #3f3f3f,
+    #2d2d2d,
+    #1a1a1a
+  );
+  background-size: 300% 100%;
+  animation: grayShimmer 15s ease-in-out infinite;
+  color: white;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glitter particles effect */
+header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+    radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    radial-gradient(circle at 40% 90%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    radial-gradient(circle at 10% 60%, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+    radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+  background-size: 300% 100%;
+  animation: glitterMove 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glitter-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.9) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 45% 40%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    radial-gradient(circle at 75% 60%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 25% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 55% 15%, rgba(255, 255, 255, 0.9) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 85% 85%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    radial-gradient(circle at 35% 55%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 65% 25%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 5% 45%, rgba(255, 255, 255, 0.9) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 95% 35%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 70% 95%, rgba(255, 255, 255, 0.9) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 12% 75%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    radial-gradient(circle at 88% 65%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px);
+  background-size: 300% 100%;
+  animation: glitterMove 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes grayShimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes glitterMove {
+  0%,
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.header-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+.header-logo-circle {
+  width: 300px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  background-color: transparent;
+}
+
+@media (max-width: 900px) {
+  .header-logo-circle {
+    width: 200px;
+  }
+}
+
+.hamburger-wrapper {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1002;
+  display: none;
+}
+
+.hamburger {
+  background: var(--primary-color);
+  border: none;
+  padding: 0.75rem;
+  cursor: pointer;
+  border-radius: 8px;
+  flex-direction: column;
+  gap: 5px;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.cart-badge.hidden {
+  display: none;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: white;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+nav {
+  grid-area: nav;
+  background-color: var(--secondary-color);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.nav-menu li {
+  flex: 1 1 auto;
+}
+
+.nav-menu a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  background-color: var(--accent-color);
+}
+
+@media (max-width: 900px) {
+  .hamburger-wrapper {
+    display: block;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--primary-color);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding-top: 80px;
+  }
+
+  nav.active {
+    right: 0;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-menu li {
+    width: 100%;
+  }
+
+  .nav-menu a {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+main {
+  grid-area: main;
+  padding: 3rem 2rem;
+  background-color: var(--bg-color);
+  min-width: 0;
+}
+
+aside {
+  grid-area: aside;
+  padding: 3rem 2rem;
+  background-color: var(--bg-secondary);
+}
+
+.sidebar-widget {
+  background-color: var(--bg-color);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.sidebar-widget h3 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.category-list {
+  list-style: none;
+}
+
+.category-list li {
+  margin-bottom: 0.75rem;
+}
+
+.category-list a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.category-list a:hover {
+  color: var(--accent-color);
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.newsletter-form input {
+  padding: 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.newsletter-form input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.newsletter-form button {
+  padding: 0.875rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.newsletter-form button:hover {
+  background-color: #3a8eef;
+  transform: translateY(-2px);
+}
+
+footer {
+  grid-area: footer;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 3rem 2rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h4 {
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+  color: var(--accent-color);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.admin-link {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.8rem;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.admin-link:hover {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(26, 26, 26, 0.05));
+  padding: 4rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.hero h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.page-header h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.page-header p {
+  font-size: 1.15rem;
+  color: var(--text-light);
+}
+
+/* Updated product grid for responsive layout - 3-4 cards desktop, 1-2 mobile */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.product-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Product card link styling - no underline, full height clickable area */
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-bottom: 1rem;
+}
+
+.product-image-wrapper {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.product-card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  margin: 0 0 0.5rem 0;
+}
+
+.product-artist {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+}
+
+.product-price {
+  color: #e74c3c;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+
+.btn-details {
+  margin-top: auto;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: #e74c3c;
+  border: 2px solid #e74c3c;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.btn-details:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.add-to-cart {
+  margin: 0 1.5rem 1.5rem;
+  padding: 0.875rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.add-to-cart:hover {
+  background-color: #c0392b;
+  transform: scale(1.02);
+}
+
+/* Mobile responsive product grid - 1 card per row on very small screens, 2 on medium */
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .product-card h3 {
+    font-size: 1rem;
+  }
+
+  .product-image-wrapper {
+    height: 180px;
+  }
+
+  .add-to-cart {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-info {
+    padding: 1rem;
+  }
+
+  .product-card h3 {
+    font-size: 0.95rem;
+  }
+}
+
+.products-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.product-detail-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 900px) {
+  .product-detail-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-info h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.product-detail-type {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.product-detail-price {
+  font-size: 2.5rem;
+  color: var(--accent-color);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.product-detail-description {
+  color: var(--text-color);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.product-detail-features {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.product-detail-features h3 {
+  font-family: "Poppins", sans-serif;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.product-detail-features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.product-detail-features li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.product-detail-features li:last-child {
+  border-bottom: none;
+}
+
+.add-to-cart-detail {
+  padding: 1.25rem 3rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+}
+
+.add-to-cart-detail:hover {
+  background-color: #3a8eef;
+  transform: translateY(-2px);
+}
+
+.contact-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+@media (max-width: 900px) {
+  .contact-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.contact-card {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.contact-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.contact-card p {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.contact-form-container {
+  background-color: var(--bg-color);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+.contact-form-container h3 {
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.contact-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.submit-btn:hover {
+  background-color: #3a8eef;
+  transform: translateY(-2px);
+}
+
+.schedule-list {
+  list-style: none;
+}
+
+.schedule-list li {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  margin: 5% auto;
+  padding: 2.5rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: var(--accent-color);
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filter-group {
+  margin-bottom: 0.5rem;
+}
+
+.filter-label {
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.filter-input,
+.filter-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  background-color: white;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+
+.price-inputs-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-filter {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.3s;
+}
+
+.btn-filter:hover {
+  background-color: #3a8eef;
+}
+
+.btn-reset {
+  display: block;
+  text-align: center;
+  margin-top: 0.8rem;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.btn-reset:hover {
+  color: var(--error-color);
+  text-decoration: underline;
+}
+
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
+}
+
+/* ==========================================================================
+   FIX FINAL: PAGINARE & BACK TO TOP
+   ========================================================================== */
+
+/* --- 1. PAGINARE CURATĂ (Fără negru, vizibilă pe mobil) --- */
+
+.pagination-container {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 3rem 0 4rem 0 !important;
+    padding: 10px !important;
+    background: transparent !important; /* Elimina fundal container */
+    position: relative;
+    z-index: 10;
+}
+
+/* Resetare agresivă pentru listă ca să scăpăm de puncte/negru */
+.pagination-list {
+    display: flex !important;
+    flex-wrap: wrap !important; /* CRITIC: Lasă butoanele să cadă pe rândul următor dacă nu au loc */
+    justify-content: center !important;
+    gap: 6px !important;
+    
+    /* Elimină orice stil de listă */
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+.pagination-list li {
+    list-style: none !important;
+    background: transparent !important; /* Elimină fundalul negru de la li */
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+/* Stilul butoanelor */
+.btn-page {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    
+    /* Dimensiuni */
+    min-width: 38px !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    
+    /* Culori curate */
+    background-color: #ffffff !important; 
+    color: #333333 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    
+    font-family: "Inter", sans-serif;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+.btn-page:hover {
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    border-color: var(--accent-color) !important;
+    transform: translateY(-2px);
+}
+
+/* Buton activ */
+.btn-page.active {
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    border-color: var(--accent-color) !important;
+    pointer-events: none;
+}
+
+/* --- REGLAJE PENTRU MOBIL (Inspect Mode) --- */
+@media (max-width: 768px) {
+    .pagination-container {
+        margin-top: 2rem !important;
+    }
+    
+    /* Pe ecrane mici, ascundem textul "Inainte/Inapoi" și lăsăm doar săgețile */
+    .desktop-text {
+        display: none !important;
+    }
+    
+    .btn-page {
+        font-size: 13px !important;
+        min-width: 34px !important; /* Butoane puțin mai mici */
+        height: 34px !important;
+    }
+}
+
+
+/* --- 2. BUTON BACK TO TOP (Reparație) --- */
+
+.back-to-top {
+    position: fixed !important;
+    bottom: 25px !important;
+    right: 25px !important;
+    width: 45px !important;
+    height: 45px !important;
+    
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    border-radius: 50% !important;
+    
+    /* Centrare iconiță */
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 99999 !important; /* Z-index uriaș ca să stea peste orice */
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    
+    /* Ascuns inițial - JS îl face vizibil */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: all 0.3s ease;
+}
+
+/* Această clasă este adăugată de JS când dai scroll */
+.back-to-top.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+.back-to-top svg {
+    stroke: white !important;
+    width: 24px;
+    height: 24px;
+}
+
+/* ==========================================================================
+   STILURI PENTRU COȘUL DE CUMPĂRĂTURI (CART)
+   ========================================================================== */
+
+/* Containerul listei de produse (permite scroll dacă sunt multe) */
+#cart-items {
+    max-height: 60vh; /* Dacă e prea înaltă lista, apare scroll */
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    padding-right: 5px; /* Spațiu pentru scrollbar */
+}
+
+/* Stil scrollbar subțire pentru coș */
+#cart-items::-webkit-scrollbar {
+    width: 6px;
+}
+#cart-items::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+/* Cardul individual de produs din coș */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    animation: fadeIn 0.3s ease;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+/* Informații produs (Stânga) */
+.cart-item-info {
+    flex: 1;
+    padding-right: 1rem;
+}
+
+.cart-item-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    font-family: "Poppins", sans-serif;
+}
+
+.cart-item-info p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* Preț și Buton Șterge (Dreapta) */
+.cart-item-price {
+    font-weight: 700;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    white-space: nowrap;
+}
+
+/* Butonul de Ștergere */
+.remove-item {
+    background-color: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.remove-item:hover {
+    background-color: #fff0f0; /* Roșu foarte pal */
+    color: var(--error-color);
+    border-color: var(--error-color);
+}
+
+/* Zona de Total */
+.cart-total {
+    border-top: 2px solid var(--border-color);
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: right;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+.cart-total strong span {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+}
+
+/* Butonul Finalizează Comanda */
+.checkout-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--success-color); /* Verde pentru acțiune pozitivă */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+}
+
+.checkout-btn:hover {
+    background-color: #059669; /* Verde mai închis */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Mesaj coș gol */
+.empty-cart {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   STILURI PENTRU PAGINILE DE AUTENTIFICARE (LOGIN / REGISTER)
+   ========================================================================== */
+
+/* Containerul principal care centrează formularul pe ecran */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh; /* Ocupă o bună parte din înălțimea ecranului */
+    padding: 2rem 1rem;
+    background-color: var(--bg-color);
+}
+
+/* Cardul alb cu umbră */
+.auth-card {
+    background-color: white;
+    width: 100%;
+    max-width: 420px; /* Lățimea maximă a cardului */
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Umbră fină modernă */
+    border: 1px solid var(--border-color);
+    text-align: center;
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Titlul paginii (Autentificare / Înregistrare) */
+.auth-card h1 {
+    font-family: "Poppins", sans-serif;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Grupurile de input-uri */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left; /* Etichetele aliniate la stânga */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: "Poppins", sans-serif;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+
+/* Butonul Principal de acțiune */
+.btn-primary {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary:hover {
+    background-color: #3a8eef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+}
+
+/* Link-ul de jos (Nu ai cont? / Ai deja cont?) */
+.auth-card p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.auth-card a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.auth-card a:hover {
+    text-decoration: underline;
+    color: #2b7de0;
+}
+
+/* Animație simplă de apariție */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   DASHBOARD REPARAT & STILIZAT (Final Fix)
+   ========================================= */
+
+.dashboard-container {
+    display: flex; /* Folosim Flexbox pentru a pune sidebar si content unul langa altul */
+    flex-wrap: wrap; /* CRITIC: Permite elementelor sa cada unul sub altul pe ecrane mici */
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    align-items: flex-start; /* Aliniere sus */
+}
+
+/* --- SIDEBAR (Bara din stânga) --- */
+.dashboard-sidebar {
+    flex: 0 0 280px; /* Lățime fixă pe desktop */
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Umbră fină, nu neagră */
+    border: 1px solid var(--border-color);
+    position: sticky; /* Rămâne vizibil când dai scroll */
+    top: 100px; /* Distanța față de meniul de sus */
+}
+
+.user-info {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-info h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Navigația din Sidebar - FĂRĂ FUNDAL NEGRU */
+.dashboard-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dashboard-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: transparent; /* Asigură că nu e negru */
+}
+
+/* Hover effect */
+.dashboard-nav-item:hover {
+    background-color: var(--bg-secondary);
+    color: var(--accent-color);
+    transform: translateX(5px); /* Mică animație la dreapta */
+}
+
+/* Link Activ */
+.dashboard-nav-item.active {
+    background-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(74, 158, 255, 0.3);
+}
+
+/* Butoane speciale */
+.dashboard-nav-item.add-btn {
+    margin-top: 1rem;
+    background-color: var(--success-color);
+    color: white;
+    justify-content: center;
+    font-weight: 600;
+}
+.dashboard-nav-item.add-btn:hover {
+    background-color: #059669;
+    transform: none;
+}
+
+.dashboard-nav-item.back-btn {
+    margin-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-light);
+    font-size: 0.9rem;
+    padding-top: 1.5rem;
+}
+
+/* --- CONTENT (Partea dreaptă) --- */
+.dashboard-content {
+    flex: 1; /* Ocupă restul spațiului disponibil */
+    min-width: 300px; /* Previne turtirea excesivă */
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
+}
+
+/* Header-ul din dashboard (Titlu + Buton) */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* TABELE RESPONSIVE */
+.table-responsive {
+    overflow-x: auto; /* CRITIC: Permite scroll orizontal la tabel pe mobil */
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Tabelul nu se micșorează sub 600px, apare scroll */
+}
+
+.users-table th {
+    background: var(--bg-secondary);
+    text-align: left;
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.users-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+
+
+/* ==========================================================================
+   FIX AGRESIV PENTRU SIDEBAR DASHBOARD (Eliminare Pătrat Negru)
+   ========================================================================== */
+
+/* 1. Forțăm containerul sidebar-ului să fie ALB */
+.dashboard-sidebar,
+aside.dashboard-sidebar {
+    background-color: #ffffff !important; /* ALB FORTAT */
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
+    color: #333 !important;
+}
+
+/* 2. Resetăm orice stil de <nav> care ar putea veni din meniul principal */
+.dashboard-sidebar nav,
+.dashboard-nav {
+    background-color: transparent !important; /* FĂRĂ CULOARE DE FUNDAL */
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: static !important; /* Să nu fie sticky/fixed greșit */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* 3. Link-urile din meniu (Elementele individuale) */
+a.dashboard-nav-item {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 10px 15px !important;
+    margin-bottom: 5px !important;
+    
+    /* AICI ESTE CHEIA: Le facem transparente implicit */
+    background-color: transparent !important; 
+    background: transparent !important;
+    
+    color: #333333 !important; /* Text gri închis */
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    border: 1px solid transparent !important; /* Fără bordură vizibilă */
+    font-weight: 500 !important;
+    box-shadow: none !important;
+}
+
+/* 4. Doar la Hover sau Active să aibă culoare */
+a.dashboard-nav-item:hover {
+    background-color: #f0f0f0 !important; /* Gri foarte deschis la hover */
+    color: #4a9eff !important; /* Albastru */
+    transform: translateX(5px);
+}
+
+a.dashboard-nav-item.active {
+    background-color: #4a9eff !important; /* Albastru doar când e selectat */
+    color: #ffffff !important; /* Text alb */
+    box-shadow: 0 4px 10px rgba(74, 158, 255, 0.3) !important;
+}
+
+/* 5. Butoane speciale (Adaugă Produs / Înapoi) */
+a.dashboard-nav-item.add-btn {
+    background-color: #10b981 !important; /* Verde */
+    color: white !important;
+    justify-content: center !important;
+    margin-top: 15px !important;
+}
+
+a.dashboard-nav-item.back-btn {
+    background-color: transparent !important;
+    color: #666 !important;
+    border-top: 1px solid #eee !important;
+    border-radius: 0 !important;
+    margin-top: 15px !important;
+    padding-top: 20px !important;
+}
+a.dashboard-nav-item.back-btn:hover {
+    color: #ef4444 !important; /* Roșu la hover */
+    background: transparent !important;
+}
+
+/* =========================================
+   STILURI PENTRU MODAL (Pop-up Adăugare User)
+   ========================================= */
+
+.modal {
+    display: none; /* Ascuns implicit */
+    position: fixed; 
+    z-index: 2000; /* Peste tot restul site-ului */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); /* Fundal negru transparent */
+    backdrop-filter: blur(4px); /* Efect modern de blur */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 5% auto; /* 5% de sus și centrat */
+    padding: 2.5rem;
+    border: 1px solid #e0e0e0;
+    width: 90%; 
+    max-width: 450px; /* Lățimea maximă */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    animation: modalSlideDown 0.3s ease-out;
+}
+
+/* Butonul X de închidere */
+.close-user-modal {
+    color: #999;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-user-modal:hover {
+    color: var(--error-color); /* Se face roșu la hover */
+}
+
+/* Input-urile din modal */
+.modal-content input, 
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: "Inter", sans-serif;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Animație de apariție */
+@keyframes modalSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   STILURI BUTOANE ACȚIUNI (Edit / Delete)
+   ========================================= */
+
+/* Containerul care ține butoanele unul lângă altul */
+.action-buttons {
+    display: flex;
+    gap: 8px; /* Spațiu între butoane */
+    align-items: center;
+}
+
+/* Stil comun pentru ambele butoane */
+.btn-action {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Inter", sans-serif;
+}
+
+/* Butonul de EDITARE (Albastru) */
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+}
+
+/* Butonul de ȘTERGERE (Roșu) */
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+}
+
+/* =========================================
+   SHOW MORE / SHOW LESS STYLES
+   ========================================= */
+
+.description-text {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* Starea "Strânsă" (Arată doar 3 linii) */
+.description-text.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Numărul de linii vizibile */
+    line-clamp: 3; /* Standard property for compatibility */
+    -webkit-box-orient: vertical;
+    max-height: 4.8em; /* Aproximativ 3 linii x 1.6 line-height */
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%); /* Efect de fade out */
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+/* Starea "Extinsă" (Arată tot) */
+.description-text.expanded {
+    display: block;
+    max-height: none;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    mask-image: none;
+    -webkit-mask-image: none;
+}
+
+/* Butonul */
+.btn-show-more {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    font-family: "Poppins", sans-serif;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.btn-show-more:hover {
+    text-decoration: underline;
+    color: #2980b9;
+}
+
+/* =========================================
+   SEARCH BAR STYLES (HEADER)
+   ========================================= */
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.05); /* Fundal subtil */
+}
+
+.header-search-form {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 5px 15px;
+    width: 100%;
+    max-width: 400px; /* Lățimea maximă a barei */
+    transition: box-shadow 0.3s ease;
+}
+
+.header-search-form:focus-within {
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2); /* Glow albastru când scrii */
+    border-color: var(--accent-color);
+}
+
+.header-search-form input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex-grow: 1;
+    padding: 5px;
+    font-size: 0.95rem;
+    font-family: "Inter", sans-serif;
+    color: var(--text-color);
+}
+
+.header-search-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 0 0 10px;
+    transition: transform 0.2s;
+}
+
+.header-search-form button:hover {
+    transform: scale(1.1);
+}
+
+/* Ajustări pentru mobil */
+@media (max-width: 900px) {
+    .search-container {
+        order: -1; /* Pune bara de căutare sus de tot în meniul de mobil */
+        margin-bottom: 10px;
+    }
+}
+
+/* Stilul pentru butonul care conține iconița SVG */
+.header-search-form .search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px 5px 5px; /* Ajustăm spațierea */
+    
+    /* Centrare SVG */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Culoarea minimalistă (Gri închis/Negru) */
+    color: #333; 
+    
+    transition: all 0.2s ease;
+}
+
+/* Când treci cu mouse-ul peste buton */
+.header-search-form .search-btn:hover {
+    transform: scale(1.1); /* Se mărește puțin */
+    color: var(--accent-color); /* Își schimbă culoarea în albastrul site-ului */
+}
+
+/* =========================================
+   PAGINARE MODERNA (DROPDOWN)
+   ========================================= */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 3rem 0;
+    padding: 10px;
+}
+
+/* Butoanele Stânga/Dreapta */
+.btn-page.prev-next {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    height: 42px; /* Înălțime fixă pentru aliniere */
+}
+
+.btn-page.prev-next:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.btn-page.prev-next.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    background-color: #f9f9f9;
+}
+
+/* Stilul pentru Dropdown */
+.pagination-select-wrapper {
+    position: relative;
+}
+
+.pagination-select {
+    appearance: none; /* Ascunde săgeata standard urâtă */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    background-color: white;
+    border: 1px solid var(--accent-color); /* Bordură colorată */
+    color: var(--primary-color);
+    padding: 0 40px 0 15px; /* Spațiu dreapta pentru săgeată */
+    height: 42px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    
+    /* Imagine de fundal pentru săgeată custom */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a9eff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+.pagination-select:hover {
+    background-color: #f0f8ff; /* Albastru foarte pal la hover */
+}
+
+.pagination-select:focus {
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+/* Responsive pentru mobil */
+@media (max-width: 600px) {
+    .pagination-container {
+        gap: 8px;
+    }
+    
+    .btn-page.prev-next {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .pagination-select {
+        font-size: 0.9rem;
+        padding-left: 10px;
+    }
+}
+
+/* =========================================
+   ICONIȚE FORMAT (CD / VINYL)
+   ========================================= */
+
+/* Asigură-te că wrapper-ul imaginii este referința pentru poziționare */
+.product-image-wrapper {
+    position: relative; /* Critic pentru ca iconița să stea în colțul LUI */
+}
+
+/* Stilul iconiței */
+.format-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;        /* Dimensiunea iconiței */
+    height: 32px;
+    z-index: 10;        /* Să fie peste imaginea produsului */
+    background-color: rgba(255, 255, 255, 0.9); /* Cerc alb semi-transparent în spate */
+    border-radius: 50%; /* O facem rotundă */
+    padding: 4px;       /* Puțin spațiu între margine și iconiță */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Umbră fină */
+    transition: transform 0.2s ease;
+}
+
+/* Efect la hover (opțional - se mărește puțin) */
+.product-card:hover .format-icon {
+    transform: scale(1.1);
+}
+
+/* =========================================
+   DASHBOARD STATS (KPI Cards)
+   ========================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Se așază automat */
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+    border-color: var(--accent-color);
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stat-title {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-desc {
+    font-size: 0.85rem;
+    color: #10b981; /* Verde pentru creștere */
+    font-weight: 500;
+}
+
+.stat-desc.negative {
+    color: #ef4444; /* Roșu pentru probleme */
+}
+
+/* =========================================
+   TABEL CU SCROLL (INVENTORY FIX)
+   ========================================= */
+.table-container-scroll {
+    width: 100%;
+    overflow-x: auto; /* Scroll orizontal */
+    overflow-y: auto; /* Scroll vertical */
+    max-height: 70vh; /* Înălțime maximă (aprox 70% din ecran) */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Fixează capul de tabel (Header) când dai scroll în jos */
+.table-container-scroll thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa; /* Gri deschis */
+    z-index: 2; /* Să stea peste conținut */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Asigură-te că rândurile nu se rup urât */
+.users-table {
+    white-space: nowrap; /* Ține textul pe un rând ca să apară scroll-ul orizontal */
+    width: 100%;
+    border-collapse: separate; /* Necesar pentru border-radius */
+    border-spacing: 0;
+}
+
+/* =========================================
+   INVENTORY TOOLBAR (Search & Filter)
+   ========================================= */
+
+.inventory-toolbar {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.inventory-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Inputul de căutare */
+.inv-search-group {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px 10px;
+    flex-grow: 1; /* Ocupă spațiul rămas */
+    min-width: 200px;
+}
+
+.inv-search-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Stilul pentru butonul de căutare din inventar */
+.inv-search-group button {
+    background: transparent; /* Fără fundal */
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+    display: flex;           /* Centrează SVG-ul perfect */
+    align-items: center;
+    justify-content: center;
+    color: #666;             /* Gri închis minimalist */
+    transition: color 0.2s ease;
+}
+
+.inv-search-group button:hover {
+    color: #000;             /* Negru la hover */
+    transform: scale(1.1);   /* Mărire fină */
+}
+
+/* Dropdown-urile */
+.inv-select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.inv-select:hover {
+    border-color: var(--accent-color);
+}
+
+/* Buton Reset */
+.btn-reset-inv {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+.btn-reset-inv:hover {
+    text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .inventory-filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .inv-search-group, .inv-select {
+        width: 100%;
+    }
+}
+
+/* =========================================
+   TABEL CU SCROLL ORIZONTAL (GLISANT)
+   ========================================= */
+
+.table-container-scroll {
+    width: 100%;
+    overflow-x: auto; /* Activează scroll-ul orizontal */
+    -webkit-overflow-scrolling: touch; /* Glisare fină pe mobile/touchpad */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.users-table {
+    width: 100%;
+    /* AICI ESTE SECRETUL: Forțăm tabelul să fie lat */
+    min-width: 1300px; 
+    border-collapse: collapse;
+}
+
+.users-table th, 
+.users-table td {
+    /* Textul stă pe un singur rând, lățind coloana */
+    white-space: nowrap; 
+    padding: 15px 20px; /* Spațiere generoasă */
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* Header-ul tabelului rămâne fix sus când dai scroll vertical (Opțional dar util) */
+.users-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9fafb;
+    z-index: 10;
+    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Hover pe rânduri pentru a urmări ușor linia */
+.users-table tbody tr:hover {
+    background-color: #f0f9ff; /* Albastru foarte pal */
+}
+
+/* =========================================================
+   FULL WIDTH PAGE (FĂRĂ SIDEBAR) - SPECIFIC PENTRU INVENTORY
+   ========================================================= */
+
+/* 1. Setări container pentru pagina fără sidebar */
+.full-width-page {
+    display: block !important;       /* Nu mai e flex (că nu mai avem sidebar) */
+    width: 98% !important;           /* Ocupă aproape tot ecranul */
+    max-width: 1800px !important;    /* Limită generoasă pentru ecrane ultrawide */
+    margin: 20px auto !important;
+    padding: 0 !important;
+}
+
+/* 2. Conținutul se extinde natural */
+.full-width-page .dashboard-content {
+    width: 100% !important;
+    padding: 2rem !important;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* 3. Optimizare Tabel pentru spațiu larg */
+.full-width-page .users-table {
+    width: 100%;
+    table-layout: auto; /* Lasă coloanele să respire */
+}
+
+.full-width-page .users-table th,
+.full-width-page .users-table td {
+    padding: 15px 20px; /* Spațiere mare și confortabilă */
+    white-space: normal; /* Textul se așază frumos */
+    vertical-align: middle;
+}
+
+/* Mărim puțin fontul pentru că avem loc */
+.full-width-page .users-table td {
+    font-size: 0.95rem;
+}
+
+/* Butoanele de acțiune stau mereu pe un rând */
+.full-width-page .action-buttons {
+    display: flex;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   DASHBOARD MINIMALIST & ICONS
+   ========================================================================== */
+
+/* 1. Meniu Hamburger Dashboard (Vizibil doar pe mobil) */
+.dashboard-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+@media (max-width: 900px) {
+    .dashboard-hamburger {
+        display: block;
+    }
+    
+    /* Pe mobil, sidebar-ul e ascuns implicit */
+    .dashboard-container .dashboard-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100vh;
+        z-index: 1001;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-container .dashboard-sidebar.active {
+        left: 0;
+    }
+
+    /* Overlay când meniul e deschis */
+    .dashboard-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        backdrop-filter: blur(2px);
+    }
+    
+    .dashboard-overlay.active {
+        display: block;
+    }
+}
+
+/* 2. Iconițe SVG Minimaliste (Alb-Negru) */
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: all 0.2s ease;
+}
+
+/* Când link-ul e activ sau hover, iconița preia culoarea textului */
+.dashboard-nav-item:hover .nav-icon,
+.dashboard-nav-item.active .nav-icon {
+    stroke: var(--accent-color); /* Sau white dacă fundalul e colorat */
+}
+.dashboard-nav-item.active .nav-icon {
+    stroke: white;
+}
+
+/* 3. Stat Cards Minimaliste */
+.stat-card-minimal {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s;
+}
+.stat-card-minimal:hover {
+    transform: translateY(-3px);
+    border-color: #333;
+}
+.stat-icon-box {
+    width: 45px;
+    height: 45px;
+    background: #f4f4f5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+}
+.stat-info h4 {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.stat-info .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111;
+}
+
+/* ==========================================================================
+   TABEL INVENTAR OPTIMIZAT (Text Truncation)
+   ========================================================================== */
+
+/* Forțăm tabelul să aibă layout fix pentru a putea tăia textul */
+.users-table.inventory-table {
+    table-layout: fixed; 
+    width: 100%;
+}
+
+/* Coloana ID - Mai lată */
+.col-id {
+    width: 80px !important; /* Lățime mărită */
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Coloana Produs - Trunchiere text */
+.col-product {
+    width: auto; /* Ia restul spațiului */
+}
+
+.product-title-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px; /* Limita după care pune "..." */
+    font-weight: 600;
+    color: #222;
+    display: block;
+}
+
+.product-artist {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Alte coloane */
+.col-img { width: 70px; }
+.col-cat { width: 100px; }
+.col-price { width: 100px; text-align: right; }
+.col-stock { width: 100px; text-align: center; }
+.col-actions { width: 100px; text-align: right; }
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .product-title-truncate {
+        max-width: 150px;
+    }
+}
+
+/* =========================================
+   AUDIO PLAYER & COVER STYLES
+   ========================================= */
+
+.product-detail-image-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden; /* Important pentru ca rotirea să nu iasă din cadru */
+    background: #f0f0f0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.product-detail-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease; /* Tranziție fină */
+}
+
+/* Clasa adăugată prin JS pentru rotație */
+.cover-rotate {
+    animation: spin 4s linear infinite;
+    border-radius: 50%; /* Se transformă în cerc */
+    transform: scale(0.9); /* Se micșorează puțin ca să arate ca un disc */
+}
+
+@keyframes spin {
+    100% { transform: scale(0.9) rotate(360deg); }
+}
+
+/* Containerul Overlay */
+.audio-player-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.1); /* Ușor întunecat */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Arată controalele când treci cu mouse-ul peste imagine SAU când cântă */
+.product-detail-image-wrapper:hover .audio-player-overlay,
+.play-btn-circle.playing ~ .preview-label, /* Hack CSS */
+.play-btn-circle.playing { 
+    opacity: 1; 
+}
+
+/* Dacă melodia cântă, păstrăm overlay-ul vizibil */
+.product-detail-image-wrapper:has(.playing) .audio-player-overlay {
+    opacity: 1;
+}
+
+/* Butonul Rotund */
+.play-btn-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 10;
+}
+
+.play-btn-circle:hover {
+    transform: scale(1.1);
+    background-color: #fff;
+    color: #2980b9;
+}
+
+.play-btn-circle svg {
+    width: 32px;
+    height: 32px;
+    margin-left: 2px; /* Ajustare optică pentru icon play */
+}
+.play-btn-circle .icon-pause {
+    margin-left: 0;
+}
+
+.preview-label {
+    margin-top: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Badge pentru format (CD/Vinyl) */
+.format-icon-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.9);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 5;
+}
+.format-icon-badge img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+}

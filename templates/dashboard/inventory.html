@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+
+{% block title %}Stocuri - Garden of Records{% endblock %}
+
+{% block content %}
+<style>
+    /* 1. Ascundem sidebar-ul GLOBAL (cel din dreapta) */
+    aside:not(.dashboard-sidebar) { display: none !important; }
+
+    /* 2. Resetăm containerul principal */
+    .grid-container, main {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 3. Containerul dashboard */
+    .dashboard-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        margin: 0 !important;
+    }
+
+    /* === STILURI NOI PENTRU CHECKBOX & TOOLBAR === */
+    
+    .inventory-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 15px;
+        background: #fff;
+        padding: 12px 15px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        position: relative;
+        min-height: 60px;
+    }
+
+    .inventory-filter-form {
+        display: flex;
+        gap: 10px;
+        flex-grow: 1;
+        align-items: center;
+        transition: opacity 0.3s;
+    }
+
+    .bulk-actions-panel {
+        display: none; 
+        align-items: center;
+        gap: 10px;
+        background: #f0f9ff;
+        padding: 5px 15px;
+        border-radius: 6px;
+        border: 1px solid #bae6fd;
+        animation: fadeIn 0.2s ease-out;
+        margin-left: auto;
+    }
+
+    .bulk-actions-panel.active {
+        display: flex;
+    }
+
+    .selected-count {
+        font-weight: 600;
+        color: #0284c7;
+        margin-right: 10px;
+        font-size: 0.9rem;
+    }
+
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--accent-color);
+        border-radius: 4px;
+    }
+
+    /* === MODIFICARE: Stil Rânduri Clickabile === */
+    .users-table tbody tr {
+        cursor: pointer; /* Cursor mânuță pe tot rândul */
+        transition: background-color 0.1s ease;
+    }
+    
+    .users-table tbody tr:hover {
+        background-color: #fafafa;
+    }
+
+    .users-table tbody tr.selected-row {
+        background-color: #f0f9ff !important;
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto; /* IMPORTANT: Lasă browserul să calculeze lățimile optime */
+    }
+
+    /* === MODIFICARE: Coloana Produs mai mică === */
+    .col-product {
+        max-width: 200px; /* Limităm lățimea coloanei */
+    }
+
+    .product-title-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 180px; /* Redus de la 250px pentru a fi mai compact */
+        font-weight: 600;
+        color: #222;
+        display: block;
+    }
+    
+    .btn-toolbar {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s;
+    }
+
+    .btn-edit-bulk {
+        background: #fff;
+        border-color: #ddd;
+        color: #333;
+    }
+    .btn-edit-bulk:hover:not(:disabled) {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+    .btn-edit-bulk:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+    }
+
+    .btn-delete-bulk {
+        background: #fee2e2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+    .btn-delete-bulk:hover {
+        background: #dc2626;
+        color: white;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+</style>
+
+<div class="dashboard-overlay" id="dashboardOverlay"></div>
+
+<div class="dashboard-container">
+    
+    <button class="dashboard-hamburger" id="dashboardHamburger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <aside class="dashboard-sidebar" id="sidebarDrawer">
+        <div class="user-info">
+             <button id="closeDashboardBtn" style="position: absolute; right: 15px; top: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; display: none;">&times;</button>
+            <h3>{{ current_user.username }}</h3>
+            <span class="role-badge role-{{ current_user.role }}">
+                {{ current_user.role }}
+            </span>
+        </div>
+        <nav class="dashboard-nav">
+            {% if current_user.is_admin() %}
+                <a href="{{ url_for('dashboard') }}" class="dashboard-nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Overview
+                </a>
+                <a href="{{ url_for('manage_users') }}" class="dashboard-nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    User Management
+                </a>
+            {% endif %}
+            
+            <a href="{{ url_for('inventory') }}" class="dashboard-nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                Gestiune Stocuri
+            </a>
+            
+            {% if current_user.is_employee() %}
+                <a href="{{ url_for('process_orders') }}" class="dashboard-nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Comenzi
+                </a>
+            {% endif %}
+
+            <a href="{{ url_for('add_product') }}" class="dashboard-nav-item add-btn" style="margin-top: 20px;">
+                <svg class="nav-icon" style="margin-right: 5px;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Adaugă Produs
+            </a>
+            
+            <a href="{{ url_for('index') }}" class="dashboard-nav-item back-btn">
+                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 12H5"></path><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Înapoi la Magazin
+            </a>
+        </nav>
+    </aside>
+
+    <div class="dashboard-content">
+        <div class="content-header">
+            <div>
+                <h1 style="margin:0; font-size:1.8rem;">Gestiune Stocuri</h1>
+                <p style="color:#666; font-size:0.9rem;">Selectează produsele pentru a le edita sau șterge.</p>
+            </div>
+        </div>
+
+        <div class="inventory-toolbar">
+            
+            <form method="GET" action="{{ url_for('inventory') }}" class="inventory-filter-form" id="filterForm">
+                <div class="inv-search-group">
+                    <button type="submit">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <input type="text" name="q" placeholder="Caută..." value="{{ values.q or '' }}">
+                </div>
+                <select name="category" onchange="this.form.submit()" class="inv-select">
+                    <option value="">Categorie...</option>
+                    <option value="CD" {% if values.category == 'CD' %}selected{% endif %}>CD</option>
+                    <option value="Vinyl" {% if values.category == 'Vinyl' %}selected{% endif %}>Vinyl</option>
+                    <option value="Merch" {% if values.category == 'Merch' %}selected{% endif %}>Merch</option>
+                </select>
+                {% if values.q or values.category %}
+                    <a href="{{ url_for('inventory') }}" style="color:#ef4444; font-weight:600; font-size:0.9rem;">Reset</a>
+                {% endif %}
+            </form>
+
+            <div class="bulk-actions-panel" id="bulkActionsPanel">
+                <span class="selected-count" id="selectedCount">0 selectate</span>
+                
+                <button type="button" class="btn-toolbar btn-edit-bulk" id="btnBulkEdit" title="Editează Selecția">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    Editează
+                </button>
+
+                <button type="button" class="btn-toolbar btn-delete-bulk" id="btnBulkDelete" title="Șterge Selecția">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Șterge
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container-scroll">
+            <table class="users-table inventory-table" id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th style="width: 40px; text-align: center;">
+                            <input type="checkbox" id="selectAll" class="custom-checkbox">
+                        </th>
+                        <th class="col-id" style="width: 60px;">ID</th>
+                        <th class="col-img" style="width: 60px;">Img</th>
+                        <th class="col-product">Produs</th>
+                        <th class="col-cat">Categorie</th>
+                        <th class="col-price">Preț</th>
+                        <th class="col-stock">Stoc</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr data-id="{{ product.id }}">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-checkbox" value="{{ product.id }}">
+                        </td>
+                        <td class="col-id">#{{ product.id }}</td>
+                        <td class="col-img">
+                            <img src="{{ product.image_url }}" style="width:40px; height:40px; object-fit:cover; border-radius:4px; border:1px solid #eee; display:block;">
+                        </td>
+                        <td class="col-product">
+                            <span class="product-title-truncate" title="{{ product.title }}">{{ product.title }}</span>
+                            <div class="product-artist">{{ product.artist }}</div>
+                        </td>
+                        <td class="col-cat">
+                            <span style="background:#f4f4f5; padding:4px 8px; border-radius:4px; font-size:0.8rem; font-weight:600; color:#444;">
+                                {{ product.category }}
+                            </span>
+                        </td>
+                        <td class="col-price">{{ "%.2f"|format(product.price) }}</td>
+                        <td class="col-stock">
+                            {% if product.stock == 0 %} 
+                                <span style="color:#ef4444; font-weight:bold; font-size:0.85rem;">Epuizat</span>
+                            {% elif product.stock < 5 %} 
+                                <span style="color:#f59e0b; font-weight:bold; font-size:0.85rem;">{{ product.stock }}</span>
+                            {% else %} 
+                                <span style="color:#10b981; font-weight:bold; font-size:0.85rem;">{{ product.stock }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+</div>
+
+<form id="deleteForm" method="POST" style="display:none;"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- SIDEBAR ---
+        const sidebar = document.getElementById('sidebarDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        const btnToggle = document.getElementById('dashboardHamburger');
+        const btnClose = document.getElementById('closeDashboardBtn');
+        function toggleMenu() { 
+            if(sidebar) sidebar.classList.toggle('active');
+            if(overlay) overlay.classList.toggle('active'); 
+        }
+        if(btnToggle) btnToggle.onclick = toggleMenu; 
+        if(btnClose) btnClose.onclick = toggleMenu; 
+        if(overlay) overlay.onclick = toggleMenu;
+
+        // --- CHECKBOX & ACTIONS ---
+        const selectAll = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkPanel = document.getElementById('bulkActionsPanel');
+        const filterForm = document.getElementById('filterForm');
+        const selectedCountLabel = document.getElementById('selectedCount');
+        const btnEdit = document.getElementById('btnBulkEdit');
+        const btnDelete = document.getElementById('btnBulkDelete');
+
+        // Funcția de actualizare a toolbar-ului
+        function updateToolbar() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const count = checkedBoxes.length;
+
+            selectedCountLabel.textContent = `${count} selectate`;
+
+            if (count > 0) {
+                bulkPanel.classList.add('active');
+            } else {
+                bulkPanel.classList.remove('active');
+            }
+
+            // Stilizare rânduri selectate
+            document.querySelectorAll('.row-checkbox').forEach(cb => {
+                const tr = cb.closest('tr');
+                if (cb.checked) tr.classList.add('selected-row');
+                else tr.classList.remove('selected-row');
+            });
+
+            // Buton Edit activ doar pentru 1 selecție
+            if (count === 1) {
+                btnEdit.disabled = false;
+                btnEdit.title = "Editează produsul selectat";
+            } else {
+                btnEdit.disabled = true;
+                btnEdit.title = "Selectează un singur produs pentru editare";
+            }
+        }
+
+        // --- MODIFICARE: Click pe Rând ---
+        const rows = document.querySelectorAll('.users-table tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('click', function(e) {
+                // Dacă nu s-a dat click direct pe un input/link/buton, facem noi toggle la checkbox
+                // target.tagName verifică dacă am dat click pe un element de form sau link
+                // Astfel nu afectăm click-urile pe viitoare butoane de acțiune din rând
+                const targetTag = e.target.tagName.toLowerCase();
+                const targetType = e.target.type;
+
+                // Dacă click-ul NU este pe checkbox și NU este pe un link/button
+                if (targetType !== 'checkbox' && targetTag !== 'a' && targetTag !== 'button' && targetTag !== 'svg' && targetTag !== 'path') {
+                    const cb = this.querySelector('.row-checkbox');
+                    if (cb) {
+                        cb.checked = !cb.checked;
+                        updateToolbar();
+                    }
+                }
+            });
+        });
+
+        // Event listener pentru "Select All"
+        selectAll.addEventListener('change', function() {
+            const isChecked = this.checked;
+            rowCheckboxes.forEach(cb => cb.checked = isChecked);
+            updateToolbar();
+        });
+
+        // Event listeners pentru checkbox-urile individuale
+        // (Pentru cazul în care userul dă click strict pe checkbox)
+        rowCheckboxes.forEach(cb => {
+            cb.addEventListener('change', updateToolbar);
+        });
+
+        // Buton EDIT
+        btnEdit.addEventListener('click', function() {
+            const checked = document.querySelector('.row-checkbox:checked');
+            if (checked) {
+                const id = checked.value;
+                window.location.href = `/edit_product/${id}`;
+            }
+        });
+
+        // Buton DELETE
+        btnDelete.addEventListener('click', function() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            if (checkedBoxes.length === 0) return;
+
+            if (confirm(`Sigur vrei să ștergi ${checkedBoxes.length} produse? Această acțiune este ireversibilă.`)) {
+                const ids = Array.from(checkedBoxes).map(cb => cb.value);
+                let promiseChain = Promise.resolve();
+
+                ids.forEach(id => {
+                    promiseChain = promiseChain.then(() => {
+                        return fetch(`/delete_product/${id}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        });
+                    });
+                });
+
+                promiseChain.then(() => {
+                    window.location.reload();
+                }).catch(err => {
+                    alert('A apărut o eroare la ștergere.');
+                    console.error(err);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

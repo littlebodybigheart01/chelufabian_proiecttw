@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Adaugă Produs - Garden of Records{% endblock %}
+
+{% block content %}
+<section class="form-container">
+    <div class="form-wrapper">
+        <h1>Adaugă Produs Nou</h1>
+        <p class="form-subtitle">Doar angajații și adminii pot adăuga produse în catalog</p>
+        
+        <form method="POST" action="{{ url_for('add_product') }}" class="add-product-form">
+            <div class="form-group">
+                <label for="title">Titlu Produs *</label>
+                <input type="text" id="title" name="title" required placeholder="Ex: Lover">
+            </div>
+            
+            <div class="form-group">
+                <label for="artist">Artist *</label>
+                <input type="text" id="artist" name="artist" required placeholder="Ex: Taylor Swift">
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Categorie *</label>
+                <select id="category" name="category" required>
+                    <option value="">Selectează categorie</option>
+                    <option value="CD">CD</option>
+                    <option value="Vinyl">Vinyl</option>
+                    <option value="Merch">Merchandise</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Preț (RON) *</label>
+                <input type="number" id="price" name="price" required step="0.01" placeholder="Ex: 99.99">
+            </div>
+            
+            <div class="form-group">
+                <label for="stock">Stoc (unități) *</label>
+                <input type="number" id="stock" name="stock" required min="0" placeholder="Ex: 10">
+            </div>
+            
+            <div class="form-group">
+                <label for="image_url">URL Imagine *</label>
+                <input type="url" id="image_url" name="image_url" required placeholder="https://example.com/image.jpg">
+            </div>
+            
+            <div class="form-group">
+    <label for="description">Descriere Produs</label>
+    <textarea id="description" name="description" rows="5" class="filter-input" placeholder="Detalii despre album..."></textarea>
+</div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Adaugă Produs</button>
+                <a href="{{ url_for('inventory') }}" class="btn-secondary">Anulează</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar-widget">
+    <h3>Informații Utile</h3>
+    <ul>
+        <li>Completează toate câmpurile obligatorii (*)</li>
+        <li>URL-ul imaginii trebuie să fie valid</li>
+        <li>Stocul trebuie să fie un număr pozitiv</li>
+        <li>Prețul se acceptă cu 2 zecimale</li>
+    </ul>
+</div>
+{% endblock %}

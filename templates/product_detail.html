@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} - Garden of Records{% endblock %}
+
+{% block content %}
+<style>
+    .product-detail-container {
+        align-items: start !important; 
+    }
+
+    @media (min-width: 900px) {
+        .product-detail-image-wrapper {
+            position: sticky !important;
+            top: 170px; 
+            z-index: 5;
+        }
+    }
+</style>
+
+<section class="product-detail-container">
+    <div class="product-detail-image-wrapper">
+        <img src="{{ product.image_url }}" alt="{{ product.title }}" class="product-detail-image" id="album-cover">
+        
+        {% if product.audio_url %}
+            <div class="audio-player-overlay">
+                <button id="custom-play-btn" class="play-btn-circle" title="Ascultă Preview">
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+                
+                <p style="display:none;" id="debug-url">{{ product.audio_url }}</p>
+                <audio id="audio-player" src="{{ product.audio_url }}" preload="auto"></audio>
+                <div class="preview-label">Preview Audio</div>
+            </div>
+        {% endif %}
+        
+        <div class="format-icon-badge">
+            {% if product.category == 'Vinyl' %}
+                <img src="{{ url_for('static', filename='images/vinyl.png') }}" alt="Vinyl">
+            {% elif product.category == 'CD' %}
+                <img src="{{ url_for('static', filename='images/cd.png') }}" alt="CD">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/merch.png') }}" alt="Merch">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="product-detail-info">
+        <h1>{{ product.title }}</h1>
+        <p class="product-detail-artist">{{ product.artist }}</p>
+        <p class="product-detail-price">{{ "%.2f"|format(product.price) }} RON</p>
+        
+        <div id="audio-error-msg" style="display:none; color: red; margin-bottom: 1rem; font-size: 0.9rem; border: 1px solid red; padding: 10px; border-radius: 8px;">
+            Eroare audio: <span id="error-text"></span>
+        </div>
+
+        <div class="product-detail-description" style="margin: 2rem 0;">
+            <h3>Despre Album</h3>
+            
+            <div id="desc-content" class="description-text collapsed">
+                <p style="white-space: pre-line;">
+                    {{ product.description if product.description else "Nu există încă o descriere detaliată pentru acest produs." }}
+                </p>
+            </div>
+
+            {% if product.description %}
+            <button id="toggle-desc-btn" class="btn-show-more">
+                Vezi mai mult &darr;
+            </button>
+            {% endif %}
+        </div>
+
+        <div class="product-detail-features">
+            <h3>Detalii Produs</h3>
+            <ul>
+                <li><strong>Categorie:</strong> {{ product.category }}</li>
+                <li><strong>Artist:</strong> {{ product.artist }}</li>
+                <li><strong>Preț:</strong> {{ "%.2f"|format(product.price) }} RON</li>
+                <li><strong>Stoc disponibil:</strong> 
+                    {% if product.stock > 0 %}
+                        {{ product.stock }} buc.
+                    {% else %}
+                        <span style="color: var(--error-color);">Epuizat</span>
+                    {% endif %}
+                </li>
+                <li><strong>Adăugat:</strong> 
+                    {% if product.date_added %}
+                        {{ product.date_added.strftime('%d.%m.%Y') }}
+                    {% else %}
+                        Recent
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        
+        {% if product.stock > 0 %}
+            <button class="add-to-cart-detail" data-name="{{ product.title }} - {{ product.artist }}" data-price="{{ product.price }}" data-type="{{ product.category }}">
+                Adaugă în coș
+            </button>
+        {% else %}
+            <button class="add-to-cart-detail" disabled style="opacity: 0.5; cursor: not-allowed; background-color: #999;">
+                Stocul este epuizat
+            </button>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Show More/Less
+        const content = document.getElementById("desc-content");
+        const btn = document.getElementById("toggle-desc-btn");
+        if (btn && content) {
+            btn.addEventListener("click", function() {
+                content.classList.toggle("collapsed");
+                content.classList.toggle("expanded");
+                btn.innerHTML = content.classList.contains("expanded") ? "Vezi mai puțin &uarr;" : "Vezi mai mult &darr;";
+            });
+        }
+
+        // 2. Audio Player Logic
+        const audio = document.getElementById('audio-player');
+        const playBtn = document.getElementById('custom-play-btn');
+        const iconPlay = document.querySelector('.icon-play');
+        const iconPause = document.querySelector('.icon-pause');
+        const cover = document.getElementById('album-cover');
+        const errorBox = document.getElementById('audio-error-msg');
+        const errorText = document.getElementById('error-text');
+
+        if(audio && playBtn) {
+            playBtn.addEventListener('click', function() {
+                if (audio.paused) {
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            iconPlay.style.display = 'none';
+                            iconPause.style.display = 'block';
+                            playBtn.classList.add('playing');
+                            cover.classList.add('cover-rotate');
+                            errorBox.style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error("Eroare Play:", error);
+                            iconPlay.style.display = 'block';
+                            iconPause.style.display = 'none';
+                            playBtn.classList.remove('playing');
+                            cover.classList.remove('cover-rotate');
+                            errorText.innerText = "Browserul a blocat redarea automată sau fișierul lipsește.";
+                            errorBox.style.display = 'block';
+                        });
+                    }
+                } else {
+                    audio.pause();
+                    iconPlay.style.display = 'block';
+                    iconPause.style.display = 'none';
+                    playBtn.classList.remove('playing');
+                    cover.classList.remove('cover-rotate');
+                }
+            });
+
+            audio.addEventListener('ended', function() {
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+                playBtn.classList.remove('playing');
+                cover.classList.remove('cover-rotate');
+            });
+            
+            audio.addEventListener('error', function(e) {
+                console.error("Audio Error:", e);
+                errorText.innerText = "Fișierul audio nu poate fi accesat.";
+                errorBox.style.display = 'block';
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar-widget">
+    <h3>Categoria {{ product.category }}</h3>
+    <p>Vizitează categoria pentru mai multe produse asemănătoare</p>
+    
+    {% if product.category == 'CD' %}
+        <a href="{{ url_for('catalog', category='CD') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate CD-urile</a>
+    {% elif product.category == 'Vinyl' %}
+        <a href="{{ url_for('catalog', category='Vinyl') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate Vinyl-urile</a>
+    {% else %}
+        <a href="{{ url_for('catalog', category='Merch') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate produsele</a>
+    {% endif %}
+</div>
+
+<div class="sidebar-widget">
+    <h3>Livrare Rapidă</h3>
+    <p>Comandă acum și primești produsul în 24-48h oriunde în țară.</p>
+</div>
+{% endblock %}
