@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Garden of Records{% endblock %}
+{% set active_page = 'dashboard' %}
+
+{% block content %}
+<div class="dashboard-page dashboard-overview">
+  <div class="dashboard-header">
+    <div>
+      <h1>Salut, {{ current_user.username }}!</h1>
+      <p class="dashboard-subtitle">Panou de control - {{ current_user.role|title }}</p>
+    </div>
+    <div class="dashboard-actions">
+      {% if current_user.is_admin() %}
+        <a href="{{ url_for('add_product') }}" class="btn-primary">Adauga produs</a>
+        <a href="{{ url_for('manage_users') }}" class="btn-secondary">Utilizatori</a>
+        <a href="{{ url_for('process_orders') }}" class="btn-secondary">Comenzi</a>
+        <a href="{{ url_for('dashboard_messages') }}" class="btn-secondary">Mesaje</a>
+      {% elif current_user.is_employee() %}
+        <a href="{{ url_for('process_orders') }}" class="btn-primary">Proceseaza comenzi</a>
+        <a href="{{ url_for('inventory') }}" class="btn-secondary">Inventar</a>
+        <a href="{{ url_for('dashboard_messages') }}" class="btn-secondary">Mesaje</a>
+      {% else %}
+        <a href="{{ url_for('catalog') }}" class="btn-primary">Vezi catalogul</a>
+        <a href="{{ url_for('my_orders') }}" class="btn-secondary">Comenzile mele</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if current_user.is_admin() %}
+    <div class="stats-grid">
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Vanzari totale</h4>
+          <div class="value">{{ "%.2f"|format(stats.total_revenue or 0) }} RON</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Utilizatori</h4>
+          <div class="value">{{ stats.total_users or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Produse</h4>
+          <div class="value">{{ stats.total_products or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box" style="color: #f59e0b;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <div class="stat-info">
+          <h4>In asteptare</h4>
+          <div class="value">{{ stats.pending_orders or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box" style="color: #10b981;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01 2 20 22 20"></polyline><polyline points="2 4 10 12.46 12 10.46"></polyline></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Expediate</h4>
+          <div class="value">{{ stats.shipped_orders or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box" style="color: #ef4444;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Stoc critic</h4>
+          <div class="value">{{ stats.low_stock or 0 }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Actiuni rapide</h3>
+      <div class="dashboard-actions">
+        <a href="{{ url_for('inventory') }}" class="btn-primary">Gestioneaza stocul</a>
+        <a href="{{ url_for('process_orders') }}" class="btn-secondary">Proceseaza comenzi</a>
+        <a href="{{ url_for('manage_users') }}" class="btn-secondary">Administreaza utilizatori</a>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Top 5 produse vandute</h3>
+      {% if stats.top_products %}
+        <div class="dashboard-list">
+          {% for product in stats.top_products %}
+            <div class="dashboard-list-item">
+              <div>
+                <strong>{{ product.title }}</strong>
+                <div class="dashboard-subtitle">{{ product.artist }}</div>
+              </div>
+              <strong>{{ product.qty }} buc</strong>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="dashboard-subtitle">Nu exista date disponibile.</p>
+      {% endif %}
+    </div>
+  {% elif current_user.is_employee() %}
+    <div class="stats-grid">
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        </div>
+        <div class="stat-info">
+          <h4>De procesat</h4>
+          <div class="value">{{ stats.pending_orders or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box" style="color: #ef4444;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Stoc epuizat</h4>
+          <div class="value">{{ stats.out_of_stock or 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card-minimal">
+        <div class="stat-icon-box" style="color: #3b82f6;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="stat-info">
+          <h4>Comenzi azi</h4>
+          <div class="value">{{ stats.orders_today or 0 }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Actiuni rapide</h3>
+      <div class="dashboard-actions">
+        <a href="{{ url_for('process_orders') }}" class="btn-primary">Proceseaza comenzi</a>
+        <a href="{{ url_for('inventory') }}" class="btn-secondary">Actualizeaza stoc</a>
+        <a href="{{ url_for('add_product') }}" class="btn-secondary">Adauga produs</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="dashboard-card">
+      <h3>Comenzile mele</h3>
+      <p class="dashboard-subtitle">Vezi statusul si istoricul comenzilor.</p>
+      <a href="{{ url_for('my_orders') }}" class="btn-primary">Deschide comenzi</a>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Setari cont</h3>
+      <p class="dashboard-subtitle">Gestioneaza datele personale.</p>
+      <a href="{{ url_for('settings') }}" class="btn-secondary">Actualizeaza contul</a>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Catalog</h3>
+      <p class="dashboard-subtitle">Continua cumparaturile din magazin.</p>
+      <a href="{{ url_for('catalog') }}" class="btn-primary">Mergi la catalog</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}

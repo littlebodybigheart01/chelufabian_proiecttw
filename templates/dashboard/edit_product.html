@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Editeaza Produs - Garden of Records{% endblock %}
+{% set active_page = 'inventory' %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Editeaza produs</h1>
+      <p class="dashboard-subtitle">Modifica detaliile pentru {{ product.title }}.</p>
+    </div>
+    <div class="dashboard-actions">
+      <a class="btn-secondary" href="{{ url_for('inventory') }}">Inventar</a>
+    </div>
+  </div>
+
+  <div class="dashboard-card" style="max-width: 720px;">
+    <form method="POST" class="add-product-form">
+      <div class="form-group">
+        <label for="title">Titlu produs</label>
+        <input type="text" id="title" name="title" required value="{{ product.title }}" class="filter-input">
+      </div>
+
+      <div class="form-group">
+        <label for="artist">Artist</label>
+        <input type="text" id="artist" name="artist" required value="{{ product.artist }}" class="filter-input">
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categorie</label>
+        <select id="category" name="category" required class="filter-select">
+          <option value="CD" {% if product.category == 'CD' %}selected{% endif %}>CD</option>
+          <option value="Vinyl" {% if product.category == 'Vinyl' %}selected{% endif %}>Vinyl</option>
+          <option value="Merch" {% if product.category == 'Merch' %}selected{% endif %}>Merchandise</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <label for="price">Pret (RON)</label>
+          <input type="number" id="price" min="0" inputmode="decimal" name="price" required step="0.01" value="{{ product.price }}" class="filter-input">
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stoc (unitati)</label>
+          <input type="number" id="stock" inputmode="numeric" name="stock" required min="0" value="{{ product.stock }}" class="filter-input">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="image_url">URL imagine</label>
+        <input type="url" id="image_url" name="image_url" required value="{{ product.image_url }}" class="filter-input">
+      </div>
+
+      <div class="form-group">
+        <label for="audio_url">Audio preview URL</label>
+        <input type="text" id="audio_url" name="audio_url" class="filter-input" value="{{ product.audio_url or '' }}" placeholder="https://audio-preview... sau qobuz:track_id|album_id">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descriere produs</label>
+        <textarea id="description" name="description" rows="5" class="filter-input">{{ product.description or '' }}</textarea>
+      </div>
+
+      <div class="form-actions" style="margin-top: 2rem;">
+        <button type="submit" class="btn-primary">Salveaza modificarile</button>
+        <a href="{{ url_for('inventory') }}" class="btn-secondary" style="margin-left: 10px; text-decoration: none; color: #666;">Anuleaza</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}
+

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Garden of Records{% endblock %}
+
+<!-- CRITIC: Această linie elimină fizic sidebar-ul din dreapta definit în base.html -->
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<style>
+    /* =========================================
+       LAYOUT FULL WIDTH FORCE
+       ========================================= */
+    
+    /* 1. Ascunde orice sidebar rezidual (siguranță) */
+    aside { display: none !important; }
+
+    /* 2. Resetează Grid-ul global pentru a permite lățime completă */
+    .grid-container, main { 
+        display: block !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+    }
+    
+    /* 3. Container specific paginii de contact */
+    .contact-page-container {
+        width: 100%;
+        max-width: 1200px; /* Lățimea maximă a conținutului util */
+        margin: 0 auto;    /* Centrare pe mijloc */
+        padding: 40px 20px;
+    }
+
+    /* =========================================
+       STILURI SPECIFICE CONTACT
+       ========================================= */
+
+    /* Header Section */
+    .contact-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    .contact-header h2 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+    }
+    .contact-header p {
+        color: #666;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Info Cards Grid */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    .info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px solid #eee;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        border-color: var(--accent-color);
+    }
+
+    /* Icon Styles */
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        background: #f0f9ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--accent-color);
+    }
+    
+    .info-card h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+    }
+    
+    .info-card p {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+
+    /* Form Section */
+    .form-section {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #eee;
+    }
+
+    .form-content {
+        flex: 1;
+        padding: 50px;
+        min-width: 300px;
+    }
+
+    .form-decoration {
+        flex: 1;
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        padding: 50px;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Efect subtil de particule pe fundalul negru */
+    .form-decoration::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: 0.5;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        transition: all 0.2s;
+        background: #f9f9f9;
+    }
+
+    .form-input:focus {
+        background: white;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        outline: none;
+    }
+
+    .submit-btn {
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .submit-btn:hover {
+        background: #3a8eef;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .form-section {
+            flex-direction: column-reverse;
+        }
+        .form-content {
+            padding: 30px;
+        }
+        .form-decoration {
+            padding: 30px;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="contact-page-container">
+    
+    <!-- Header -->
+    <div class="contact-header">
+        <h2>Hai să discutăm!</h2>
+        <p>Ai întrebări despre un vinil sau o comandă? Suntem aici să te ajutăm.</p>
+    </div>
+
+    <!-- Info Cards Grid -->
+    <div class="contact-grid">
+        <!-- Email Card -->
+        <div class="info-card">
+            <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <h3>Email</h3>
+            <p>suport@gardenofrecords.ro</p>
+            <p>contact@gardenofrecords.ro</p>
+        </div>
+
+        <!-- Phone Card -->
+        <div class="info-card">
+            <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <h3>Telefon</h3>
+            <p>+40 722 123 456</p>
+            <p>Luni - Vineri: 09:00 - 18:00</p>
+        </div>
+
+        <!-- Location Card -->
+        <div class="info-card">
+            <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <h3>Locație</h3>
+            <p>Strada Muzicii, Nr. 12</p>
+            <p>București, Sector 1</p>
+        </div>
+
+        <!-- Schedule Card (Mutat din Sidebar) -->
+        <div class="info-card">
+            <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <h3>Program Showroom</h3>
+            <p>L-V: 09:00 - 18:00</p>
+            <p>Sâmbătă: 10:00 - 14:00</p>
+        </div>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="form-section">
+        <!-- Partea Stângă: Formular -->
+        <div class="form-content">
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem; color: #1a1a1a;">Trimite un mesaj</h3>
+            <form action="{{ url_for('contact') }}" method="POST">
+                <div class="form-group">
+                    <label>Numele Tău</label>
+                    <input type="text" name="name" class="form-input" placeholder="Ex: Popescu Ion" required>
+                </div>
+                <div class="form-group">
+                    <label>Adresa de Email</label>
+                    <input type="email" name="email" class="form-input" placeholder="nume@exemplu.ro" required>
+                </div>
+                <div class="form-group">
+                    <label>Subiect</label>
+                    <input type="text" name="subject" class="form-input" placeholder="Ex: Intrebare despre un album">
+                </div>
+                <div class="form-group">
+                    <label>Mesajul Tău</label>
+                    <textarea name="message" class="form-input" rows="5" placeholder="Salut! Aș vrea să știu dacă..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    Trimite Mesajul
+                    <svg style="width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Partea Dreaptă: Decorativă / Info Extra -->
+        <div class="form-decoration">
+            <h3 style="font-size: 2rem; margin-bottom: 20px; position: relative; z-index: 1;">FAQ Rapid</h3>
+            <div style="position: relative; z-index: 1;">
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--accent-color); margin-bottom: 5px;">Livrați internațional?</h4>
+                    <p style="opacity: 0.8;">Momentan livrăm doar pe teritoriul României, dar lucrăm la extindere.</p>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--accent-color); margin-bottom: 5px;">Retururi?</h4>
+                    <p style="opacity: 0.8;">Ai 14 zile la dispoziție pentru a returna orice produs sigilat.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 5px;">Precomandă?</h4>
+                    <p style="opacity: 0.8;">Produsele la precomandă sunt expediate în ziua lansării oficiale.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

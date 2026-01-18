@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Comenzile Mele - Garden of Records{% endblock %}
+{% set active_page = 'orders' %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Istoric comenzi</h1>
+      <p class="dashboard-subtitle">Vezi statusul comenzilor plasate.</p>
+    </div>
+    <div class="dashboard-actions">
+      <a class="btn-primary" href="{{ url_for('catalog') }}">Plaseaza o comanda</a>
+      <a class="btn-secondary" href="{{ url_for('dashboard') }}">Overview</a>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="table-container-scroll">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th style="width: 60px;">ID</th>
+            <th style="width: 90px;">Data</th>
+            <th style="flex: 1; min-width: 200px;">Produse</th>
+            <th style="width: 90px;">Total</th>
+            <th style="width: 90px;">Status</th>
+            <th style="width: 80px; text-align: center;">Actiuni</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if orders and orders|length > 0 %}
+            {% for order in orders %}
+            <tr>
+              <td>#{{ order.id|six_digit }}</td>
+              <td style="font-size: 0.85rem;">{{ order.date_created.strftime('%d.%m.%y') if order.date_created else '-' }}</td>
+              <td style="font-size: 0.85rem; color: #666;">
+                {% for item in order.items %}
+                  {{ (item.product and item.product.title) or 'Produs sters' }}{% if item.quantity > 1 %} (x{{ item.quantity }}){% endif %}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              </td>
+              <td style="font-weight: 600;">{{ "%.2f"|format(order.total_amount) }} RON</td>
+              <td><span class="status-badge status-{{ order.status }}">{{ order.status }}</span></td>
+              <td style="text-align: center;">
+                {% if order.status == 'pending' %}
+                  <button class="btn-icon btn-cancel" data-id="{{ order.id }}" title="Anuleaza comanda">&times;</button>
+                {% else %}
+                  <span style="color: #999; font-size: 0.85rem;">-</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 2rem; color: #999;">
+                Nu ai plasat nicio comanda inca.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dashboard/_pagination.html" %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-cancel').forEach(btn => {
+      btn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        const orderId = this.getAttribute('data-id');
+        if (!confirm(`Sigur vrei sa anulezi comanda #${orderId}?`)) return;
+
+        try {
+          const res = await fetch(`/api/orders/${orderId}/cancel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            alert('Comanda a fost anulata cu succes! Stocul a fost restabilit.');
+            window.location.reload();
+          } else {
+            alert(`Eroare: ${data.error || 'Nu s-a putut anula comanda'}`);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Eroare server. Incearca din nou.');
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}

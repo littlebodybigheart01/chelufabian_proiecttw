@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block body_class %}no-aside{% endblock %}
+{% block title %}Checkout - Garden of Records{% endblock %}
+
+{% block content %}
+<section class="checkout-shell">
+  <div class="checkout-hero">
+    <div>
+      <h1>Finalizeaza comanda</h1>
+      <p>Completeaza livrarea, verifica produsele si plaseaza comanda.</p>
+    </div>
+    <div class="checkout-actions">
+      <a href="{{ url_for('catalog') }}">Inapoi la catalog</a>
+      <button type="button" id="openCartBtn">Vezi cosul</button>
+    </div>
+  </div>
+
+  <div class="checkout-grid">
+    <form id="checkoutForm" class="checkout-form" novalidate>
+      {% if addresses and addresses|length > 0 %}
+      <article class="checkout-card">
+        <h2>Adrese salvate</h2>
+        <p class="dash-muted" style="margin-bottom: 12px;">Selecteaza o adresa pentru completare automata.</p>
+        <div class="checkout-field">
+          <label for="addressSelect">Alege adresa</label>
+          <select id="addressSelect" class="filter-input">
+            <option value="">Selecteaza...</option>
+            {% for address in addresses %}
+              <option
+                value="{{ address.id }}"
+                data-label="{{ address.label or '' }}"
+                data-name="{{ address.name }}"
+                data-phone="{{ address.phone }}"
+                data-address1="{{ address.address_line1 }}"
+                data-address2="{{ address.address_line2 or '' }}"
+                data-city="{{ address.city }}"
+                data-county="{{ address.county or '' }}"
+                data-postal="{{ address.postal_code or '' }}"
+              >
+                {{ address.label or 'Adresa salvata' }} - {{ address.city }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </article>
+      {% endif %}
+
+      <article class="checkout-card">
+        <h2>Date de livrare</h2>
+        <div class="checkout-form-grid">
+          <div class="checkout-field">
+            <label for="shippingName">Nume complet *</label>
+            <input id="shippingName" type="text" autocomplete="name" placeholder="Ex: Ion Popescu" required>
+          </div>
+          <div class="checkout-field">
+            <label for="shippingPhone">Telefon *</label>
+            <input id="shippingPhone" type="tel" autocomplete="tel" placeholder="07xx xxx xxx" required>
+          </div>
+          <div class="checkout-field">
+            <label for="shippingCity">Oras *</label>
+            <input id="shippingCity" type="text" autocomplete="address-level2" placeholder="Bucuresti" required>
+          </div>
+          <div class="checkout-field">
+            <label for="shippingCounty">Judet / Sector</label>
+            <input id="shippingCounty" type="text" autocomplete="address-level1" placeholder="Sector 3 / Ilfov">
+          </div>
+          <div class="checkout-field" style="grid-column: 1 / -1;">
+            <label for="shippingAddress1">Adresa (strada, numar, bloc, ap.) *</label>
+            <input id="shippingAddress1" type="text" autocomplete="address-line1" placeholder="Str. Exemplu 10, bl. A, ap. 12" required>
+          </div>
+          <div class="checkout-field" style="grid-column: 1 / -1;">
+            <label for="shippingAddress2">Detalii adresa</label>
+            <input id="shippingAddress2" type="text" autocomplete="address-line2" placeholder="Interfon, etaj, punct reper (optional)">
+          </div>
+          <div class="checkout-field">
+            <label for="shippingPostal">Cod postal</label>
+            <input id="shippingPostal" type="text" autocomplete="postal-code" placeholder="010001">
+          </div>
+          <div class="checkout-field">
+            <label for="shippingEmail">Email (optional)</label>
+            <input id="shippingEmail" type="email" autocomplete="email" placeholder="email@exemplu.com">
+          </div>
+        </div>
+      </article>
+
+      <article class="checkout-card">
+        <h2>Metoda de plata</h2>
+        <div class="checkout-pay">
+          <label class="checkout-payopt active">
+            <input type="radio" name="paymentMethod" value="cash" checked>
+            <strong>Ramburs</strong>
+            <span class="dash-muted">Platesti la livrare.</span>
+          </label>
+          <label class="checkout-payopt">
+            <input type="radio" name="paymentMethod" value="card">
+            <strong>Card (demo)</strong>
+            <span class="dash-muted">In proiect este doar interfata.</span>
+          </label>
+        </div>
+
+        <div class="checkout-field" style="margin-top: 12px;">
+          <label for="notes">Observatii</label>
+          <textarea id="notes" rows="3" placeholder="Instructiuni pentru curier, interval orar etc."></textarea>
+        </div>
+      </article>
+
+      <article class="checkout-card">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom: 12px;">
+          <input id="agreeTerms" type="checkbox" required>
+          <label for="agreeTerms" style="font-weight:700;">Sunt de acord cu termenii si conditiile. *</label>
+        </div>
+        <div class="checkout-submit">
+          <a class="dash-btn ghost" href="{{ url_for('catalog') }}">Continua cumparaturile</a>
+          <button class="dash-btn primary" id="placeOrderBtn" type="submit">Plaseaza comanda</button>
+        </div>
+        <p class="dash-muted" style="margin-top: 10px;">
+          Comanda se creeaza prin API si scade stocul produselor.
+        </p>
+      </article>
+    </form>
+
+    <aside class="checkout-summary">
+      <article class="checkout-card">
+        <h2>Rezumat comanda</h2>
+        <p class="dash-muted"><span id="itemsCount">0</span> produse</p>
+        <div id="summaryItems" class="summary-items">
+          <div class="dash-muted">Se incarca...</div>
+        </div>
+      </article>
+
+      <article class="summary-totals">
+        <div class="summary-line"><span>Subtotal</span><strong id="sumSubtotal">0.00 RON</strong></div>
+        <div class="summary-line"><span>Transport</span><strong id="sumShipping">0.00 RON</strong></div>
+        <div class="summary-line total"><span>Total</span><strong id="sumTotal">0.00 RON</strong></div>
+      </article>
+
+      <div id="checkoutEmpty" class="checkout-empty" hidden>
+        <h3>Cosul este gol</h3>
+        <p>Adauga produse in cos ca sa poti finaliza comanda.</p>
+        <a class="dash-btn primary" href="{{ url_for('catalog') }}">Mergi la catalog</a>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+  function formatRON(v){ return (Number(v || 0)).toFixed(2) + " RON"; }
+
+  function getCart(){
+    try { return JSON.parse(localStorage.getItem("cart")) || []; }
+    catch { return []; }
+  }
+
+  function calcTotals(cart){
+    let subtotal = 0, qty = 0;
+    cart.forEach(it => {
+      const q = Math.max(1, Number(it.quantity || 1));
+      const p = Number(it.price || 0);
+      subtotal += p * q;
+      qty += q;
+    });
+    const shipping = 0;
+    return { subtotal, shipping, total: subtotal + shipping, qty };
+  }
+
+  function renderSummary(){
+    const cart = getCart();
+    const { subtotal, shipping, total, qty } = calcTotals(cart);
+
+    const itemsCountEl = document.getElementById("itemsCount");
+    const itemsEl = document.getElementById("summaryItems");
+
+    itemsCountEl.textContent = qty;
+
+    if (!cart.length){
+      itemsEl.innerHTML = `<div class="dash-muted">Nu ai produse in cos.</div>`;
+    } else {
+      itemsEl.innerHTML = "";
+      cart.forEach(item => {
+        const q = Math.max(1, Number(item.quantity || 1));
+        const p = Number(item.price || 0);
+        const img = item.image_url || "{{ url_for('static', filename='images/logo-transparent.png') }}";
+
+        const row = document.createElement("div");
+        row.className = "summary-item";
+        row.innerHTML = `
+          <img src="${img}" alt="" loading="lazy" decoding="async">
+          <div style="flex:1;">
+            <strong>${item.name || "Produs"}</strong>
+            <span class="dash-muted">x${q}</span>
+          </div>
+          <div><strong>${formatRON(p * q)}</strong></div>
+        `;
+        itemsEl.appendChild(row);
+      });
+    }
+
+    document.getElementById("sumSubtotal").textContent = formatRON(subtotal);
+    document.getElementById("sumShipping").textContent = formatRON(shipping);
+    document.getElementById("sumTotal").textContent = formatRON(total);
+
+    return { cart, subtotal, shipping, total };
+  }
+
+  function setEmptyState(isEmpty){
+    document.getElementById("checkoutEmpty").hidden = !isEmpty;
+    document.getElementById("placeOrderBtn").disabled = isEmpty;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const openCartBtn = document.getElementById("openCartBtn");
+    if (openCartBtn) {
+      openCartBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const cartModal = document.getElementById("cart-modal");
+        if (cartModal) {
+          displayCart();
+          cartModal.style.display = "block";
+        }
+      });
+    }
+
+    const addressSelect = document.getElementById("addressSelect");
+    if (addressSelect) {
+      addressSelect.addEventListener("change", () => {
+        const opt = addressSelect.options[addressSelect.selectedIndex];
+        if (!opt || !opt.value) return;
+
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== undefined && val !== null) el.value = val;
+        };
+
+        setVal("shippingName", opt.dataset.name || "");
+        setVal("shippingPhone", opt.dataset.phone || "");
+        setVal("shippingCity", opt.dataset.city || "");
+        setVal("shippingCounty", opt.dataset.county || "");
+        setVal("shippingAddress1", opt.dataset.address1 || "");
+        setVal("shippingAddress2", opt.dataset.address2 || "");
+        setVal("shippingPostal", opt.dataset.postal || "");
+      });
+    }
+
+    document.querySelectorAll('.checkout-payopt').forEach(label => {
+      label.addEventListener('click', () => {
+        document.querySelectorAll('.checkout-payopt').forEach(el => el.classList.remove('active'));
+        label.classList.add('active');
+      });
+    });
+
+    const { cart } = renderSummary();
+    setEmptyState(!cart.length);
+
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart"){
+        const { cart: c } = renderSummary();
+        setEmptyState(!c.length);
+      }
+    });
+
+    document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const cartNow = getCart();
+      if (!cartNow.length){
+        setEmptyState(true);
+        alert("Cosul este gol! Nu poti plasa o comanda fara produse.");
+        return;
+      }
+
+      const val = (id) => (document.getElementById(id)?.value || "").trim();
+      const shippingName = val("shippingName");
+      const shippingPhone = val("shippingPhone");
+      const city = val("shippingCity");
+      const county = val("shippingCounty");
+      const address1 = val("shippingAddress1");
+      const address2 = val("shippingAddress2");
+      const postal = val("shippingPostal");
+      const notes = val("notes");
+
+      if (!document.getElementById("agreeTerms").checked){
+        alert("Te rog accepta termenii si conditiile.");
+        return;
+      }
+
+      if (!shippingName || !shippingPhone || !city || !address1){
+        alert("Completeaza campurile obligatorii (Nume, Telefon, Oras, Adresa).");
+        return;
+      }
+
+      const shippingAddress = [
+        address1,
+        address2 ? address2 : null,
+        city,
+        county ? county : null,
+        postal ? ("Cod postal: " + postal) : null
+      ].filter(Boolean).join(", ");
+
+      const btn = document.getElementById("placeOrderBtn");
+      const prev = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Se proceseaza...";
+
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            cart: cartNow,
+            shippingname: shippingName,
+            shippingphone: shippingPhone,
+            shippingaddress: shippingAddress,
+            notes: notes
+          })
+        });
+
+        const data = await res.json();
+        if (data && data.success){
+          localStorage.removeItem("cart");
+          window.location.href = "/order-confirmation/" + data.order_id;
+        } else {
+          alert((data && data.error) ? data.error : "Eroare la plasarea comenzii.");
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
+      } catch (err){
+        console.error("Checkout error:", err);
+        alert("Eroare server. Incearca din nou.");
+        btn.disabled = false;
+        btn.textContent = prev;
+      }
+    });
+  });
+</script>
+{% endblock %}
+

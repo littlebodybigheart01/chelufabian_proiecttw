@@ -1,0 +1,47 @@
+{% if pagination and pagination.pages > 1 %}
+<div class="dashboard-pagination">
+  {% set current = pagination.page %}
+  {% set total = pagination.pages %}
+  {% set window = 2 %}
+
+  {% if pagination.has_prev %}
+    <a class="page-btn" href="{{ paginate_url(pagination.prev_num) }}">Prev</a>
+  {% else %}
+    <span class="page-btn disabled">Prev</span>
+  {% endif %}
+
+  <a class="page-btn {% if current == 1 %}active{% endif %}" href="{{ paginate_url(1) }}">1</a>
+
+  {% if current - window > 2 %}
+    <span class="page-ellipsis">...</span>
+  {% endif %}
+
+  {% set start = current - window %}
+  {% if start < 2 %}{% set start = 2 %}{% endif %}
+  {% set end = current + window %}
+  {% if end > total %}{% set end = total %}{% endif %}
+  {% for p in range(start, end + 1) %}
+    {% if p != 1 and p != total %}
+      {% if p == current %}
+        <span class="page-btn active">{{ p }}</span>
+      {% else %}
+        <a class="page-btn" href="{{ paginate_url(p) }}">{{ p }}</a>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {% if current + window < total - 1 %}
+    <span class="page-ellipsis">...</span>
+  {% endif %}
+
+  {% if total > 1 %}
+    <a class="page-btn {% if current == total %}active{% endif %}" href="{{ paginate_url(total) }}">{{ total }}</a>
+  {% endif %}
+
+  {% if pagination.has_next %}
+    <a class="page-btn" href="{{ paginate_url(pagination.next_num) }}">Next</a>
+  {% else %}
+    <span class="page-btn disabled">Next</span>
+  {% endif %}
+</div>
+{% endif %}

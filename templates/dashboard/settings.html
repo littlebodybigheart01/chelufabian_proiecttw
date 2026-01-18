@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Setari - Garden of Records{% endblock %}
+{% set active_page = 'settings' %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Setari cont</h1>
+      <p class="dashboard-subtitle">Actualizeaza datele personale in siguranta.</p>
+    </div>
+    <div class="dashboard-actions">
+      {% if current_user.is_client() %}
+        <a class="btn-secondary" href="{{ url_for('my_orders') }}">Comenzile mele</a>
+      {% else %}
+        <a class="btn-secondary" href="{{ url_for('dashboard') }}">Overview</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="dashboard-card" style="max-width: 640px;">
+    <form action="{{ url_for('update_profile') }}" method="POST">
+      <div class="form-group">
+        <label>Nume utilizator</label>
+        <input type="text" name="username" value="{{ current_user.username }}" class="filter-input" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ current_user.email }}" class="filter-input" required>
+      </div>
+
+      <button type="submit" class="btn-primary">Salveaza modificarile</button>
+    </form>
+  </div>
+
+  <div class="dashboard-card" style="max-width: 640px;">
+    <form action="{{ url_for('update_password') }}" method="POST">
+      <div class="form-group">
+        <h4 style="margin-bottom: 1rem;">Schimbare parola</h4>
+        <label>Parola actuala</label>
+        <input type="password" name="current_password" class="filter-input" required placeholder="********">
+      </div>
+
+      <div class="form-group">
+        <label>Parola noua</label>
+        <input type="password" name="new_password" class="filter-input" required placeholder="********">
+      </div>
+
+      <div class="form-group">
+        <label>Confirma parola noua</label>
+        <input type="password" name="confirm_password" class="filter-input" required placeholder="********">
+      </div>
+
+      <button type="submit" class="btn-primary">Actualizeaza parola</button>
+    </form>
+  </div>
+
+  {% if current_user.is_client() %}
+  <div class="dashboard-card" style="max-width: 900px;">
+    <h3 style="margin-bottom: 6px;">Adrese salvate</h3>
+    <p class="dashboard-subtitle" style="margin-bottom: 1.25rem;">Foloseste adresele salvate pentru checkout rapid.</p>
+
+    <form action="{{ url_for('add_address') }}" method="POST" class="dashboard-card" style="padding: 1rem; background: #fafafa; border: 1px dashed #e5e7eb;">
+      <h4 style="margin-bottom: 1rem;">Adauga adresa noua</h4>
+      <div class="dashboard-form-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+        <div class="form-group">
+          <label>Eticheta (optional)</label>
+          <input type="text" name="label" class="filter-input" placeholder="Acasa, Birou">
+        </div>
+        <div class="form-group">
+          <label>Nume complet *</label>
+          <input type="text" name="name" class="filter-input" required placeholder="Ex: Ion Popescu">
+        </div>
+        <div class="form-group">
+          <label>Telefon *</label>
+          <input type="text" name="phone" class="filter-input" required placeholder="07xx xxx xxx">
+        </div>
+        <div class="form-group">
+          <label>Oras *</label>
+          <input type="text" name="city" class="filter-input" required placeholder="Bucuresti">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Adresa (strada, numar, bloc, ap.) *</label>
+          <input type="text" name="address_line1" class="filter-input" required placeholder="Str. Exemplu 10, bl. A, ap. 12">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Detalii adresa</label>
+          <input type="text" name="address_line2" class="filter-input" placeholder="Interfon, etaj, punct reper">
+        </div>
+        <div class="form-group">
+          <label>Judet / Sector</label>
+          <input type="text" name="county" class="filter-input" placeholder="Sector 3 / Ilfov">
+        </div>
+        <div class="form-group">
+          <label>Cod postal</label>
+          <input type="text" name="postal_code" class="filter-input" placeholder="010001">
+        </div>
+      </div>
+      <button type="submit" class="btn-primary" style="margin-top: 1rem;">Salveaza adresa</button>
+    </form>
+
+    <div style="margin-top: 1.5rem;">
+      {% if addresses and addresses|length > 0 %}
+        {% for address in addresses %}
+          <div class="dashboard-card" style="padding: 1rem;">
+            <form action="{{ url_for('update_address', address_id=address.id) }}" method="POST">
+              <div style="display:flex; align-items:center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                <strong>{{ address.label or 'Adresa salvata' }}</strong>
+                <span class="dash-muted">ID: {{ address.id|six_digit }}</span>
+              </div>
+              <div class="dashboard-form-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+                <div class="form-group">
+                  <label>Eticheta</label>
+                  <input type="text" name="label" class="filter-input" value="{{ address.label or '' }}">
+                </div>
+                <div class="form-group">
+                  <label>Nume complet *</label>
+                  <input type="text" name="name" class="filter-input" required value="{{ address.name }}">
+                </div>
+                <div class="form-group">
+                  <label>Telefon *</label>
+                  <input type="text" name="phone" class="filter-input" required value="{{ address.phone }}">
+                </div>
+                <div class="form-group">
+                  <label>Oras *</label>
+                  <input type="text" name="city" class="filter-input" required value="{{ address.city }}">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label>Adresa *</label>
+                  <input type="text" name="address_line1" class="filter-input" required value="{{ address.address_line1 }}">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label>Detalii adresa</label>
+                  <input type="text" name="address_line2" class="filter-input" value="{{ address.address_line2 or '' }}">
+                </div>
+                <div class="form-group">
+                  <label>Judet / Sector</label>
+                  <input type="text" name="county" class="filter-input" value="{{ address.county or '' }}">
+                </div>
+                <div class="form-group">
+                  <label>Cod postal</label>
+                  <input type="text" name="postal_code" class="filter-input" value="{{ address.postal_code or '' }}">
+                </div>
+              </div>
+              <div style="display:flex; gap: 10px; margin-top: 12px; align-items: center;">
+                <button type="submit" class="btn-primary">Actualizeaza</button>
+              </div>
+            </form>
+            <form action="{{ url_for('delete_address', address_id=address.id) }}" method="POST" style="margin-top: 10px;">
+              <button type="submit" class="btn-secondary" onclick="return confirm('Stergi aceasta adresa?');">Sterge</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="dashboard-subtitle">Nu ai adrese salvate.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block body_class %}no-aside{% endblock %}
+{% block title %}Comanda confirmata - Garden of Records{% endblock %}
+
+{% block content %}
+<section class="checkout-shell">
+  <div class="checkout-hero" style="background: linear-gradient(135deg, #065f46, #0f766e);">
+    <div>
+      <h1>Comanda a fost inregistrata</h1>
+      <p>Numar comanda: <strong>#{{ order.id|six_digit }}</strong>
+        {% if order.date_created %}
+          <span style="margin: 0 6px;">?</span>{{ order.date_created.strftime('%d.%m.%Y') }}
+        {% endif %}
+      </p>
+    </div>
+    <div class="checkout-actions">
+      <a href="{{ url_for('catalog') }}">Continua cumparaturile</a>
+      <a href="{{ url_for('index') }}">Acasa</a>
+    </div>
+  </div>
+
+  <div class="checkout-grid">
+    <article class="checkout-card">
+      <h2>Detalii livrare</h2>
+      <div class="checkout-form-grid">
+        <div class="checkout-field">
+          <label>Nume</label>
+          <input type="text" value="{{ order.shipping_name or '-' }}" disabled>
+        </div>
+        <div class="checkout-field">
+          <label>Telefon</label>
+          <input type="text" value="{{ order.shipping_phone or '-' }}" disabled>
+        </div>
+        <div class="checkout-field" style="grid-column: 1 / -1;">
+          <label>Adresa</label>
+          <textarea rows="3" disabled>{{ order.shipping_address or '-' }}</textarea>
+        </div>
+      </div>
+      <div style="margin-top: 12px;">
+        <span class="status-badge status-{{ order.status or 'pending' }}">{{ order.status or 'pending' }}</span>
+      </div>
+    </article>
+
+    <aside class="checkout-summary">
+      <article class="checkout-card">
+        <h2>Produse</h2>
+        <div class="summary-items">
+          {% if order.items and order.items|length > 0 %}
+            {% set ns = namespace(subtotal=0) %}
+            {% for item in order.items %}
+              {% set line_total = (item.price or 0) * (item.quantity or 1) %}
+              {% set ns.subtotal = ns.subtotal + line_total %}
+              <div class="summary-item">
+                <img src="{{ item.product.image_url if item.product and item.product.image_url else url_for('static', filename='images/logo-transparent.png') }}" alt="" loading="lazy" decoding="async">
+                <div style="flex: 1;">
+                  <strong>{{ item.product.title if item.product else ("Produs #" ~ item.product_id) }}</strong>
+                  <span class="dash-muted">x{{ item.quantity or 1 }}{% if item.product and item.product.artist %} ? {{ item.product.artist }}{% endif %}</span>
+                </div>
+                <div><strong>{{ "%.2f"|format(line_total) }} RON</strong></div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="dash-muted">Nu exista articole asociate acestei comenzi.</div>
+            {% set ns = namespace(subtotal=0) %}
+          {% endif %}
+        </div>
+      </article>
+
+      <article class="summary-totals">
+        <div class="summary-line"><span>Subtotal</span><strong>{{ "%.2f"|format(ns.subtotal or 0) }} RON</strong></div>
+        <div class="summary-line"><span>Transport</span><strong>0.00 RON</strong></div>
+        <div class="summary-line total"><span>Total</span><strong>{{ "%.2f"|format(order.total_amount or 0) }} RON</strong></div>
+      </article>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+

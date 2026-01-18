@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - Garden of Records{% endblock %}
+{% set active_page = 'manage_users' %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Administrare utilizatori</h1>
+      <p class="dashboard-subtitle">Gestioneaza conturile si rolurile.</p>
+    </div>
+    <div class="dashboard-actions">
+      <button class="btn-primary" id="openUserModalBtn" type="button">Utilizator nou</button>
+      <a class="btn-secondary" href="{{ url_for('dashboard') }}">Overview</a>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="inventory-toolbar">
+      <div class="inventory-filter-form">
+        <div class="inv-search-group">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" data-filter-table="usersTable" placeholder="Cauta user sau email..." style="border:none; outline:none; margin-left:8px; font-size:0.9rem;">
+        </div>
+        <button id="openUserModalInline" class="btn-toolbar btn-success" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Utilizator nou
+        </button>
+      </div>
+
+      <div class="bulk-actions-panel" id="bulkActionsPanel">
+        <span class="selected-count" id="selectedCount">0 selectate</span>
+        <button type="button" class="btn-toolbar btn-danger" id="btnBulkDelete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Sterge selectia
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container-scroll">
+      <table class="users-table" id="usersTable">
+        <thead>
+          <tr>
+            <th style="width: 40px; text-align: center;">
+              <input type="checkbox" id="selectAll" class="custom-checkbox">
+            </th>
+            <th>ID</th>
+            <th>Utilizator</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Data inregistrare</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr data-id="{{ user.id }}">
+            <td style="text-align: center;">
+              {% if user.id != current_user.id %}
+                <input type="checkbox" class="custom-checkbox row-checkbox" value="{{ user.id }}">
+              {% else %}
+                <span style="color:#ccc;">-</span>
+              {% endif %}
+            </td>
+            <td>{{ user.id }}</td>
+            <td><strong>{{ user.username }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td><span class="role-badge role-{{ user.role }}">{{ user.role|capitalize }}</span></td>
+            <td>{{ user.date_created.strftime('%d.%m.%Y') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dashboard/_pagination.html" %}
+  </div>
+</div>
+
+<div id="addUserModal" class="modal">
+  <div class="modal-content" style="max-width: 420px;">
+    <span class="close-user-modal" style="float: right; font-size: 1.5rem; cursor: pointer;">&times;</span>
+    <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">Creeaza cont nou</h2>
+    <form method="POST" action="{{ url_for('add_user') }}">
+      <div class="form-group">
+        <label>Utilizator</label>
+        <input type="text" name="username" required class="filter-input">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required class="filter-input">
+      </div>
+      <div class="form-group">
+        <label>Rol</label>
+        <select name="role" class="filter-select" style="width: 100%;">
+          <option value="client">Client</option>
+          <option value="angajat">Angajat</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Parola</label>
+        <input type="password" name="password" required class="filter-input">
+      </div>
+      <button type="submit" class="btn-primary" style="margin-top: 1rem;">Salveaza</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addUserModal');
+    const openButtons = [
+      document.getElementById('openUserModalBtn'),
+      document.getElementById('openUserModalInline')
+    ].filter(Boolean);
+    const span = document.querySelector('.close-user-modal');
+
+    openButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.style.display = 'block';
+      });
+    });
+    if (span) span.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    const selectAll = document.getElementById('selectAll');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const bulkPanel = document.getElementById('bulkActionsPanel');
+    const selectedCountLabel = document.getElementById('selectedCount');
+    const btnDelete = document.getElementById('btnBulkDelete');
+
+    function updateToolbar() {
+      const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+      const count = checkedBoxes.length;
+      selectedCountLabel.textContent = `${count} selectate`;
+
+      if (count > 0) bulkPanel.classList.add('active');
+      else bulkPanel.classList.remove('active');
+
+      document.querySelectorAll('.row-checkbox').forEach(cb => {
+        const tr = cb.closest('tr');
+        if (cb.checked) tr.classList.add('selected-row');
+        else tr.classList.remove('selected-row');
+      });
+    }
+
+    document.querySelectorAll('.users-table tbody tr').forEach(row => {
+      row.addEventListener('click', function(e) {
+        if (e.target.type !== 'checkbox' && e.target.tagName.toLowerCase() !== 'button') {
+          const cb = this.querySelector('.row-checkbox');
+          if (cb) {
+            cb.checked = !cb.checked;
+            updateToolbar();
+          }
+        }
+      });
+    });
+
+    selectAll.addEventListener('change', function() {
+      const isChecked = this.checked;
+      rowCheckboxes.forEach(cb => cb.checked = isChecked);
+      updateToolbar();
+    });
+
+    rowCheckboxes.forEach(cb => cb.addEventListener('change', updateToolbar));
+
+    btnDelete.addEventListener('click', function() {
+      const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+      if (checkedBoxes.length === 0) return;
+      if (confirm(`Sigur vrei sa stergi ${checkedBoxes.length} utilizatori?`)) {
+        const ids = Array.from(checkedBoxes).map(cb => cb.value);
+        let promiseChain = Promise.resolve();
+        ids.forEach(id => {
+          promiseChain = promiseChain.then(() => fetch(`/delete_user/${id}`, { method: 'POST' }));
+        });
+        promiseChain.then(() => window.location.reload())
+                    .catch(() => alert('Eroare la stergere.'));
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}

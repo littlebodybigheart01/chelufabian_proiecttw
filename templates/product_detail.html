@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} - Garden of Records{% endblock %}
+
+{% block content %}
+<style>
+    .product-detail-container {
+        align-items: start !important; 
+    }
+
+    @media (min-width: 900px) {
+        .product-detail-image-wrapper {
+            position: sticky !important;
+            top: 170px; 
+            z-index: 5;
+        }
+    }
+    .product-detail-purchase {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 0.5rem 0 1.5rem;
+    }
+
+    .product-detail-purchase .product-detail-price {
+        margin: 0;
+    }
+
+    .stock-pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(46, 204, 113, 0.15);
+        color: #1f8b4c;
+    }
+
+    .stock-pill.out {
+        background: rgba(231, 76, 60, 0.12);
+        color: #c0392b;
+    }
+</style>
+
+<section class="product-detail-container">
+    <div class="product-detail-image-wrapper">
+        <img src="{{ product.image_url }}" alt="{{ product.title }}" class="product-detail-image" id="album-cover" loading="eager" decoding="async" fetchpriority="high">
+        
+        {% if product.audio_url %}
+            <div class="audio-player-overlay">
+                <button id="custom-play-btn" class="play-btn-circle" title="Asculta preview" aria-label="Asculta preview" aria-pressed="false">
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+                
+                <p style="display:none;" id="debug-url">{{ product.audio_url }}</p>
+                {% if product.audio_url[:6] == 'qobuz:' %}
+                    {% set qobuz_payload = product.audio_url[6:] %}
+                    {% set qobuz_parts = qobuz_payload.split('|') %}
+                    <audio
+                        id="audio-player"
+                        data-qobuz-track="{{ qobuz_parts[0] }}"
+                        data-qobuz-album="{{ qobuz_parts[1] if qobuz_parts|length > 1 else '' }}"
+                        preload="none"
+                    ></audio>
+                {% else %}
+                    <audio id="audio-player" src="{{ product.audio_url }}" preload="auto"></audio>
+                {% endif %}
+                <div class="preview-label">Preview Audio</div>
+            </div>
+        {% endif %}
+        
+        <div class="format-icon-badge">
+            {% if product.category == 'Vinyl' %}
+                <img src="{{ url_for('static', filename='images/vinyl.png') }}" alt="Vinyl">
+            {% elif product.category == 'CD' %}
+                <img src="{{ url_for('static', filename='images/cd.png') }}" alt="CD">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/merch.png') }}" alt="Merch">
+            {% endif %}
+        </div>
+    </div>
+
+            <div class="product-detail-info">
+        <h1>{{ product.title }}</h1>
+        <p class="product-detail-artist">{{ product.artist }}</p>
+        <div class="product-detail-purchase">
+            <p class="product-detail-price">{{ "%.2f"|format(product.price) }} RON</p>
+            {% if product.stock > 0 %}
+                <span class="stock-pill">In stoc</span>
+            {% else %}
+                <span class="stock-pill out">Epuizat</span>
+            {% endif %}
+
+            {% if product.stock > 0 %}
+                <button class="add-to-cart-detail" type="button" aria-label="Adauga in cos {{ product.title }} - {{ product.artist }}" data-id="{{ product.id }}" data-name="{{ product.title }} - {{ product.artist }}" data-price="{{ product.price }}" data-type="{{ product.category }}" data-image="{{ product.image_url }}">
+                    Adauga in cos
+                </button>
+            {% else %}
+                <button class="add-to-cart-detail" type="button" aria-label="Adauga in cos {{ product.title }} - {{ product.artist }}" disabled aria-disabled="true" style="opacity: 0.5; cursor: not-allowed; background-color: #999;">
+                    Stocul este epuizat
+                </button>
+            {% endif %}
+        </div>
+        
+        <div id="audio-error-msg" style="display:none; color: red; margin-bottom: 1rem; font-size: 0.9rem; border: 1px solid red; padding: 10px; border-radius: 8px;">
+            Eroare audio: <span id="error-text"></span>
+        </div>
+
+        <div class="product-detail-description" style="margin: 2rem 0;">
+            <h3>Despre Album</h3>
+            
+            <div id="desc-content" class="description-text collapsed">
+                <p style="white-space: pre-line;">
+                    {{ product.description | replace('\\n', '\n') if product.description else "Nu exista inca o descriere detaliata pentru acest produs." }}
+                </p>
+            </div>
+
+            {% if product.description %}
+            <button id="toggle-desc-btn" class="btn-show-more">
+                Vezi mai mult &darr;
+            </button>
+            {% endif %}
+        </div>
+
+        <div id="track-preview-section" style="margin: 2rem 0; display: none;">
+            <h3>Preview Piese</h3>
+            <div id="track-preview-list"></div>
+        </div>
+
+        <div class="product-detail-features">
+            <h3>Detalii Produs</h3>
+            <ul>
+                <li><strong>Categorie:</strong> {{ product.category }}</li>
+                <li><strong>Artist:</strong> {{ product.artist }}</li>
+                <li><strong>Pret:</strong> {{ "%.2f"|format(product.price) }} RON</li>
+                <li><strong>Stoc disponibil:</strong> 
+                    {% if product.stock > 0 %}
+                        {{ product.stock }} buc.
+                    {% else %}
+                        <span style="color: var(--error-color);">Epuizat</span>
+                    {% endif %}
+                </li>
+                <li><strong>Adaugat:</strong> 
+                    {% if product.date_added %}
+                        {{ product.date_added.strftime('%d.%m.%Y') }}
+                    {% else %}
+                        Recent
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Show More/Less
+        const content = document.getElementById("desc-content");
+        const btn = document.getElementById("toggle-desc-btn");
+        if (btn && content) {
+            btn.addEventListener("click", function() {
+                content.classList.toggle("collapsed");
+                content.classList.toggle("expanded");
+                btn.innerHTML = content.classList.contains("expanded") ? "Vezi mai puțin &uarr;" : "Vezi mai mult &darr;";
+            });
+        }
+
+        // 2. Audio Player Logic
+        const audio = document.getElementById('audio-player');
+        const playBtn = document.getElementById('custom-play-btn');
+        const iconPlay = document.querySelector('.icon-play');
+        const iconPause = document.querySelector('.icon-pause');
+        const cover = document.getElementById('album-cover');
+        const errorBox = document.getElementById('audio-error-msg');
+        const errorText = document.getElementById('error-text');
+
+        if(audio && playBtn) {
+            const qobuzTrack = audio.dataset.qobuzTrack;
+            const qobuzAlbum = audio.dataset.qobuzAlbum;
+            let currentTrackId = qobuzTrack ? String(qobuzTrack) : null;
+            const setPlaybackState = (isPlaying) => {
+                iconPlay.style.display = isPlaying ? 'none' : 'block';
+                iconPause.style.display = isPlaying ? 'block' : 'none';
+                playBtn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+                if (isPlaying) {
+                    playBtn.classList.add('playing');
+                    cover.classList.add('cover-rotate');
+                    errorBox.style.display = 'none';
+                } else {
+                    playBtn.classList.remove('playing');
+                    cover.classList.remove('cover-rotate');
+                }
+            };
+            if (qobuzTrack) {
+                playBtn.disabled = true;
+                fetch(`/api/qobuz/preview/${encodeURIComponent(qobuzTrack)}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data && data.url) {
+                            audio.src = data.url;
+                            audio.preload = 'auto';
+                            playBtn.disabled = false;
+                        } else {
+                            throw new Error('Missing preview URL');
+                        }
+                    })
+                    .catch(() => {
+                        errorText.innerText = "Preview-ul nu poate fi incarcat.";
+                        errorBox.style.display = 'block';
+                        syncTrackHighlight(false);
+                        playBtn.disabled = false;
+                    });
+            }
+
+            const trackSection = document.getElementById('track-preview-section');
+            const trackList = document.getElementById('track-preview-list');
+            const syncTrackHighlight = (isPlaying) => {
+                if (!trackList) return;
+                trackList.querySelectorAll('.dashboard-list-item').forEach((row) => {
+                    const match = currentTrackId && row.dataset.trackId === String(currentTrackId);
+                    row.classList.toggle('is-playing', Boolean(isPlaying && match));
+                });
+            };
+            const formatDuration = (seconds) => {
+                if (!seconds && seconds !== 0) return '';
+                const mins = Math.floor(seconds / 60);
+                const secs = String(seconds % 60).padStart(2, '0');
+                return `${mins}:${secs}`;
+            };
+
+            if (qobuzAlbum && trackSection && trackList) {
+                trackSection.style.display = '';
+                trackList.innerHTML = '<p class="dashboard-subtitle">Se incarca piesele...</p>';
+                fetch(`/api/qobuz/album/${encodeURIComponent(qobuzAlbum)}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        const tracks = Array.isArray(data.tracks) ? data.tracks : [];
+                        if (!tracks.length) {
+                            trackList.innerHTML = '<p class="dashboard-subtitle">Nu exista piese pentru acest album.</p>';
+                            return;
+                        }
+                        trackList.innerHTML = '';
+                        tracks.forEach((t, idx) => {
+                            const row = document.createElement('div');
+                            row.className = 'dashboard-list-item';
+                            row.dataset.trackId = t.id ? String(t.id) : '';
+                            const time = formatDuration(t.duration);
+                            row.innerHTML = `
+                                <div class="album-result">
+                                    <div>
+                                        <strong>${idx + 1}. ${t.title || 'Piesa fara titlu'}</strong>
+                                        ${time ? `<div class="dashboard-subtitle">${time}</div>` : ''}
+                                    </div>
+                                </div>
+                                <button class="btn-secondary" type="button" aria-label="Play ${t.title || 'piesa'}">Play</button>
+                            `;
+                            const playTrackBtn = row.querySelector('button');
+                            playTrackBtn.addEventListener('click', async () => {
+                                currentTrackId = t.id ? String(t.id) : null;
+                                if (!t.id) return;
+                                playTrackBtn.disabled = true;
+                                try {
+                                    const preview = await fetch(`/api/qobuz/preview/${encodeURIComponent(t.id)}`);
+                                    const previewData = await preview.json();
+                                    if (previewData && previewData.url) {
+                                        audio.src = previewData.url;
+                                        syncTrackHighlight(true);
+                                        await audio.play();
+                                    }
+                                } catch (err) {
+                                    errorText.innerText = "Preview-ul nu poate fi incarcat.";
+                                    errorBox.style.display = 'block';
+                                    syncTrackHighlight(false);
+                                } finally {
+                                    playTrackBtn.disabled = false;
+                                }
+                            });
+                            trackList.appendChild(row);
+                        });
+                        syncTrackHighlight(!audio.paused);
+                    })
+                    .catch(() => {
+                        trackList.innerHTML = '<p class="dashboard-subtitle">Eroare la preluarea pieselor.</p>';
+                    });
+            }
+            playBtn.addEventListener('click', function() {
+                if (audio.paused) {
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.error("Eroare Play:", error);
+                            setPlaybackState(false);
+                            errorText.innerText = "Browserul a blocat redarea automat sau fisierul lipseste.";
+                            errorBox.style.display = 'block';
+                        });
+                    }
+                } else {
+                    audio.pause();
+                }
+            });
+
+            audio.addEventListener('play', function() {
+                setPlaybackState(true);
+                syncTrackHighlight(true);
+            });
+
+            audio.addEventListener('pause', function() {
+                setPlaybackState(false);
+                syncTrackHighlight(false);
+            });
+
+            audio.addEventListener('ended', function() {
+                setPlaybackState(false);
+                syncTrackHighlight(false);
+            });
+            
+            audio.addEventListener('error', function(e) {
+                console.error("Audio Error:", e);
+                errorText.innerText = "Fisierul audio nu poate fi accesat.";
+                errorBox.style.display = 'block';
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar-widget">
+    <h3>Categoria {{ product.category }}</h3>
+    <p>Vizitează categoria pentru mai multe produse asemănătoare</p>
+    
+    {% if product.category == 'CD' %}
+        <a href="{{ url_for('catalog', category='CD') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate CD-urile</a>
+    {% elif product.category == 'Vinyl' %}
+        <a href="{{ url_for('catalog', category='Vinyl') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate Vinyl-urile</a>
+    {% else %}
+        <a href="{{ url_for('catalog', category='Merch') }}" class="btn-secondary" style="width:100%; display:block; text-align:center; margin-top:10px;">Vezi toate produsele</a>
+    {% endif %}
+</div>
+
+<div class="sidebar-widget">
+    <h3>Livrare Rapidă</h3>
+    <p>Comandă acum și primești produsul în 24-48h oriunde în țară.</p>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

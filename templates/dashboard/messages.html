@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Mesaje - Garden of Records{% endblock %}
+{% set active_page = 'messages' %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Mesaje clienti</h1>
+      <p class="dashboard-subtitle">Mesajele trimise din formularul de contact.</p>
+    </div>
+    <div class="dashboard-actions">
+      <a class="btn-secondary" href="{{ url_for('dashboard') }}">Overview</a>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="inventory-toolbar">
+      <div class="inventory-filter-form">
+        <div class="inv-search-group">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" data-filter-table="messagesTable" placeholder="Cauta nume, email, subiect..." style="border:none; outline:none; margin-left:8px; font-size:0.9rem;">
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container-scroll">
+      <table class="users-table" id="messagesTable">
+        <thead>
+          <tr>
+            <th style="width: 140px;">Data</th>
+            <th style="width: 180px;">Nume</th>
+            <th style="width: 220px;">Email</th>
+            <th style="width: 200px;">Subiect</th>
+            <th>Mesaj</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if messages and messages|length > 0 %}
+            {% for msg in messages %}
+            <tr>
+              <td>{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+              <td><strong>{{ msg.name }}</strong></td>
+              <td><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></td>
+              <td>{{ msg.subject or '-' }}</td>
+              <td class="message-preview">{{ msg.message }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: #999;">
+                Nu exista mesaje inca.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dashboard/_pagination.html" %}
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  {% include "dashboard/_menu.html" %}
+{% endblock %}

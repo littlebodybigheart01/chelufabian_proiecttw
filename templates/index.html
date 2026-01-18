@@ -1,0 +1,67 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Acasa - Garden of Records{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h2>Bun venit la Garden of Records</h2>
+    <p>Descopera cele mai bune albume pe CD si vinyl, plus merchandise exclusiv pentru adevaratii iubitori de muzica.</p>
+</section>
+
+<section class="news-section">
+    <h2>Produse Noi</h2>
+    <div class="products-grid">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-card-link">
+                    
+                    <div class="product-image-wrapper">
+                        <img src="{{ product.image_url }}" alt="{{ product.title }}" class="product-image" loading="lazy" decoding="async">
+                        
+                        {% if product.category == 'Vinyl' %}
+                            <img src="{{ url_for('static', filename='images/vinyl.png') }}" class="format-icon" title="Format: Vinyl" alt="Vinyl">
+                        {% elif product.category == 'CD' %}
+                            <img src="{{ url_for('static', filename='images/cd.png') }}" class="format-icon" title="Format: CD" alt="CD">
+                        {% elif product.category == 'Merch' %}
+                            <img src="{{ url_for('static', filename='images/merch.png') }}" class="format-icon" title="Format: Merchandise" alt="Merch">
+                        {% endif %}
+                    </div>
+
+                    <div class="product-info">
+                        <h3>{{ product.title }}</h3>
+                        <p class="product-artist">{{ product.artist }}</p>
+                        <p class="product-price">{{ "%.2f"|format(product.price) }} RON</p>
+                        <span class="btn-details">Vezi Detalii</span>
+                    </div>
+                </a>
+                <button class="add-to-cart" type="button" aria-label="Adauga in cos {{ product.title }} - {{ product.artist }}" data-id="{{ product.id }}" data-name="{{ product.title }} - {{ product.artist }}" data-price="{{ product.price }}" data-type="{{ product.category }}" data-image="{{ product.image_url }}">Adauga in cos</button>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-products">
+            <p>Nu sunt produse disponibile in acest moment.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar-widget">
+    <h3>Categorii Populare</h3>
+    <ul class="category-list">
+        <li><a href="{{ url_for('catalog', category='Vinyl') }}">Vinyl-uri</a></li>
+        <li><a href="{{ url_for('catalog', category='CD') }}">CD-uri</a></li>
+        <li><a href="{{ url_for('catalog', category='Merch') }}">Merchandise</a></li>
+    </ul>
+</div>
+<div class="sidebar-widget">
+    <h3>Newsletter</h3>
+    <p>Aboneaza-te pentru oferte exclusive!</p>
+    <form class="newsletter-form" action="{{ url_for('newsletter_subscribe') }}" method="post">
+        <input type="email" name="email" placeholder="Email-ul tau" required>
+        <button type="submit">Aboneaza-te</button>
+    </form>
+</div>
+{% endblock %}

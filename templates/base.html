@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Garden of Records{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css', v=static_version) }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    <div class="grid-container">
+        <header id="top">
+            <div class="glitter-layer"></div>
+            <div class="header-content">
+                <div class="header-logo-wrapper">
+                    <a href="{{ url_for('index') }}" class="logo-link">
+                        <img src="{{ url_for('static', filename='images/logo-transparent.png') }}" alt="Garden of Records Logo" class="header-logo-circle" decoding="async" fetchpriority="high">
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="hamburger-wrapper">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-controls="nav-menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="cart-badge hidden" id="mobile-cart-badge" aria-live="polite" aria-atomic="true">0</div>
+        </div>
+
+        <nav id="nav-menu" aria-label="Main navigation">
+            <div class="search-container">
+                <form action="{{ url_for('catalog') }}" method="GET" class="header-search-form">
+                    <input type="text" name="q" placeholder="Cauta album, artist..." value="{{ request.args.get('q', '') }}" aria-label="Cauta album sau artist" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search">
+                    <button type="submit" title="Cauta" class="search-btn" aria-label="Cauta">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+</button>
+                </form>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}">Acasa</a></li>
+                
+                <li><a href="{{ url_for('catalog', category='CD') }}">CD-uri</a></li>
+                <li><a href="{{ url_for('catalog', category='Vinyl') }}">Vinyl-uri</a></li>
+                <li><a href="{{ url_for('catalog', category='Merch') }}">Merchandise</a></li>
+                <li><a href="{{ url_for('catalog') }}">Toate Produsele</a></li>
+                
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="#" id="cart-link" aria-haspopup="dialog">Cos (<span id="cart-count" aria-live="polite" aria-atomic="true">0</span>)</a></li>
+                
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}">Deconectare</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Autentificare</a></li>
+                    <li><a href="{{ url_for('register') }}">Înregistrare</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <aside>
+            {% block sidebar %}{% endblock %}
+        </aside>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Garden of Records</h4>
+                    <p>Magazinul tau de muzica preferat!</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link-uri Rapide</h4>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Acasa</a></li>
+                        <li><a href="{{ url_for('catalog', category='CD') }}">CD-uri</a></li>
+                        <li><a href="{{ url_for('catalog', category='Vinyl') }}">Vinyl-uri</a></li>
+                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>contact@gardenofrecords.ro</p>
+                    <p>+40 123 456 789</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Garden of Records. Toate drepturile rezervate.</p>
+                <a href="#" class="admin-link">•</a>
+            </div>
+        </footer>
+    </div>
+
+    <a href="#top" class="back-to-top" aria-label="Mergi sus">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </a>
+
+    <div id="cart-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close" role="button" aria-label="Inchide">&times;</span>
+            <h2 id="cart-title">Cosul tau de cumparaturi</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <strong>Total: <span id="cart-total">0.00</span> RON</strong>
+            </div>
+            <button class="checkout-btn">Finalizeaza comanda</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/main.js', v=static_version) }}"></script>
+    {% block extrajs %}{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

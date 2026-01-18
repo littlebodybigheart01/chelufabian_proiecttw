@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Catalog - Garden of Records{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h2>
+        {% if values.category %}
+            {{ values.category }}
+        {% else %}
+            Toate Produsele
+        {% endif %}
+    </h2>
+    <p>Găsește muzica ta preferată</p>
+</section>
+
+<section class="products-section">
+    <div class="catalog-toolbar">
+        <span>Am găsit <strong>{{ pagination.total }}</strong> produse</span>
+        
+        {% if values.q %}
+            <span style="margin-left: 5px; color: var(--primary-color);">
+                pentru: "<strong>{{ values.q }}</strong>"
+            </span>
+        {% endif %}
+        
+        {% if values.category or values.artist or values.min_price or values.max_price or values.q %}
+            <a href="{{ url_for('catalog') }}" style="color: var(--error-color); font-size: 0.9rem; margin-left: 10px; text-decoration: none;">(Șterge filtrele)</a>
+        {% endif %}
+    </div>
+
+    <div class="products-grid">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-card-link">
+                    
+                    <div class="product-image-wrapper">
+                        <img src="{{ product.image_url }}" alt="{{ product.title }}" class="product-image" loading="lazy" decoding="async">
+                        
+                        {% if product.category == 'Vinyl' %}
+                            <img src="{{ url_for('static', filename='images/vinyl.png') }}" class="format-icon" title="Format: Vinyl" alt="Vinyl">
+                        {% elif product.category == 'CD' %}
+                            <img src="{{ url_for('static', filename='images/cd.png') }}" class="format-icon" title="Format: CD" alt="CD">
+                        {% elif product.category == 'Merch' %}
+                            <img src="{{ url_for('static', filename='images/merch.png') }}" class="format-icon" title="Format: Merchandise" alt="Merch">
+                        {% endif %}
+                    </div>
+
+                    <div class="product-info">
+                        <h3>{{ product.title }}</h3>
+                        <p class="product-artist">{{ product.artist }}</p>
+                        <p class="product-price">{{ "%.2f"|format(product.price) }} RON</p>
+                        <span class="btn-details">Vezi Detalii</span>
+                    </div>
+                </a>
+                <button class="add-to-cart" type="button" aria-label="Adauga in cos {{ product.title }} - {{ product.artist }}" data-id="{{ product.id }}" data-name="{{ product.title }} - {{ product.artist }}" data-price="{{ product.price }}" data-type="{{ product.category }}" data-image="{{ product.image_url }}">Adauga in cos</button>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-products" style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
+            <h3 style="margin-bottom: 1rem;">Nu am găsit rezultate :(</h3>
+            <p>Încearcă alte filtre sau resetează căutarea.</p>
+            <a href="{{ url_for('catalog') }}" class="btn-details" style="display: inline-block; margin-top: 1rem;">Resetează tot</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% include "dashboard/_pagination.html" %}
+
+
+</section>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar-widget">
+    <h3>Filtrează</h3>
+    <form action="{{ url_for('catalog') }}" method="GET" class="filter-form">
+        
+        {% if values.q %}
+            <input type="hidden" name="q" value="{{ values.q }}">
+        {% endif %}
+
+        <div class="filter-group">
+            <label class="filter-label">Categorie</label>
+            <select name="category" class="filter-select">
+                <option value="">Toate</option>
+                <option value="Vinyl" {% if values.category == 'Vinyl' %}selected{% endif %}>Vinyl</option>
+                <option value="CD" {% if values.category == 'CD' %}selected{% endif %}>CD</option>
+                <option value="Merch" {% if values.category == 'Merch' %}selected{% endif %}>Merch</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Artist</label>
+            <input type="text" name="artist" class="filter-input" value="{{ values.artist or '' }}" placeholder="ex: Metallica">
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Preț (RON)</label>
+            <div class="price-inputs-container">
+                <input type="number" name="min_price" class="filter-input" placeholder="Min" value="{{ values.min_price }}" min="0" inputmode="decimal">
+                <span style="padding: 0 5px; color: var(--text-light);">-</span>
+                <input type="number" name="max_price" class="filter-input" placeholder="Max" value="{{ values.max_price }}" min="0" inputmode="decimal">
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Sortează după</label>
+            <select name="sort" class="filter-select">
+                <option value="newest">Cele mai noi</option>
+                <option value="price_asc" {% if values.sort == 'price_asc' %}selected{% endif %}>Preț: Mic la Mare</option>
+                <option value="price_desc" {% if values.sort == 'price_desc' %}selected{% endif %}>Preț: Mare la Mic</option>
+                <option value="name_asc" {% if values.sort == 'name_asc' %}selected{% endif %}>Nume: A-Z</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-filter">Aplică Filtre</button>
+        <a href="{{ url_for('catalog') }}" class="btn-reset">Resetează tot</a>
+    </form>
+</div>
+{% endblock %}
+
