@@ -31,6 +31,9 @@ Aplicatie Flask completa pentru magazin de muzica (CD, Vinyl, Merch), cu integra
 - Integrare Qobuz prin proxy server-side (preview audio si tracklist)
 - Newsletter cu email unic
 
+  <img width="1141" height="777" alt="image" src="https://github.com/user-attachments/assets/62f41064-9b54-447c-b821-7b54c8d80155" />
+
+
 ### Stack
 
 - Python 3.11
