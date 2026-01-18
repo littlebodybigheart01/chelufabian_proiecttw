@@ -12,6 +12,9 @@ Aplicatie Flask completa pentru magazin de muzica (CD, Vinyl, Merch), cu integra
 - Dashboard pentru management produse si utilizatori
 - Newsletter cu salvare email
 
+  <img width="516" height="778" alt="image" src="https://github.com/user-attachments/assets/2fa1f20d-05de-4db9-bbcc-83bd5b2a113a" />
+
+
 ### Functionalitati detaliate
 
 - Catalog produse cu filtre (categorie, artist, pret), sortare si cautare
